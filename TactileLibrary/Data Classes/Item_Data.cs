@@ -20,6 +20,8 @@ namespace TactileLibrary
         public Item_Data_Type Type;
         public int Id;
         public int Uses;
+        public int Kills;
+        public bool Drops;
 
         #region Accessors
         public Data_Equipment to_equipment
@@ -68,25 +70,26 @@ namespace TactileLibrary
         #region Serialization
         public static Item_Data read(BinaryReader reader)
         {
-            int count = reader.ReadInt32();
             Item_Data result;
-            if (count == 3)
-                result = new Item_Data(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
-            else //Debug
-                result = new Item_Data(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+            int type = reader.ReadInt32();
+            int id = reader.ReadInt32();
+            int uses = reader.ReadInt32();
+            int kills = reader.ReadInt32();
+            bool drops = reader.ReadBoolean();
+            
+            
+            result = new Item_Data((Item_Data_Type)type, id, uses, kills, drops);
 
             return result;
         }
 
         public void write(BinaryWriter writer)
         {
-            if (true) //Debug
-            {
-                writer.Write(3);
-                writer.Write((int)Type);
-                writer.Write(Id);
-                writer.Write(Uses);
-            }
+            writer.Write((int)Type);
+            writer.Write(Id);
+            writer.Write(Uses);
+            writer.Write(Kills);
+            writer.Write(Drops);
         }
         #endregion
 
@@ -108,16 +111,23 @@ namespace TactileLibrary
                 Uses = this.max_uses;
         }
         public Item_Data(int type, int id) : this((Item_Data_Type)type, id) { }
-        public Item_Data(Item_Data_Type type, int id, int uses)
+        public Item_Data(Item_Data_Type type, int id, int uses, int kills = 0, bool drops = false)
         {
             Type = type;
             Id = id;
             Uses = uses;
+            Kills = kills;
+            Drops = drops;
         }
         public Item_Data(int type, int id, int uses) : this((Item_Data_Type)type, id, uses) { }
         public Item_Data(Item_Data data) : this(data.Type, data.Id, data.Uses) { }
 
         public bool is_weapon
+        {
+            get { return Type == Item_Data_Type.Weapon && Id > 0; }
+        }
+
+        public bool is_secondary // this needs to be changed probably for secondary equip support
         {
             get { return Type == Item_Data_Type.Weapon && Id > 0; }
         }
@@ -199,6 +209,11 @@ namespace TactileLibrary
         public void add_uses(int n)
         {
             Uses += n;
+        }
+
+        public virtual void increase_kills()
+        {
+            Kills++;
         }
 
         public void set_uses(int uses)

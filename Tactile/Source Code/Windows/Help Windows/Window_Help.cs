@@ -184,11 +184,14 @@ namespace Tactile
             if (item.is_weapon)
             {
                 // If staff
-                if (!(item as Data_Weapon).is_staff())
+                if (!(item as Data_Weapon).is_staff() && !(item as Data_Weapon).is_secondary_equip())
                 {
                     //Help_Text.loc += new Vector2(0, 32); //Debug
                     width = 176; //160;
-                    rows = 2;
+                    if (item_data.Kills > 0)
+                        rows = 3;
+                    else
+                        rows = 2;
                 }
                 // Else
                 else

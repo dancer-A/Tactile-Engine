@@ -354,6 +354,7 @@
     <Compile Include="Source Code\Windows\Options\SettingsWindow.cs" />
     <Compile Include="Source Code\Windows\Preparations Menus\WindowPrepActorList.cs" />
     <Compile Include="Source Code\Windows\ScrollComponent.cs" />
+    <Compile Include="Source Code\Windows\Shop\Window_Blacksmith.cs" />
     <Compile Include="Source Code\Windows\Target Windows\Window_Target_Placeable.cs" />
     <Compile Include="Source Code\Windows\Title\WindowSupportViewerActorList.cs" />
     <Compile Include="Source Code\Windows\User Interface\Command\Config\ConfigLabeledUINode.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="Source Code\Windows\User Interface\Map\DataTeamUINode.cs" />
     <Compile Include="Source Code\Windows\User Interface\Map\UnitScreenUINode.cs" />
     <Compile Include="Source Code\Windows\User Interface\Map\UnitHeaderUINode.cs" />
+    <Compile Include="Source Code\Windows\User Interface\Status\StatusLeadershipUINode.cs" />
     <Compile Include="Source Code\Windows\User Interface\Title\Difficulty_Info_Panel.cs" />
     <Compile Include="Source Code\Sprites\Title\Game_Updated_Banner.cs" />
     <Compile Include="Source Code\Windows\User Interface\Title\MainMenuChoicePanel.cs" />

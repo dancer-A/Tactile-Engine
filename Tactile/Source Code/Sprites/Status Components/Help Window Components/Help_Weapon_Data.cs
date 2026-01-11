@@ -22,7 +22,9 @@ namespace Tactile
         protected void initialize(Item_Data item_data, Game_Actor actor)
         {
             Data_Weapon weapon = item_data.to_weapon;
-            int stats = !weapon.is_staff() ? 6 : 3;
+            int kill_counter = item_data.Kills;
+
+            int stats = (!weapon.is_staff() && !weapon.is_secondary_equip()) ? 6 : 3;
             bool effective = false;
             foreach(int bonus in weapon.Effectiveness)
                 if (bonus != 1)
@@ -31,17 +33,22 @@ namespace Tactile
                     stats++;
                     break;
                 }
+            if (kill_counter > 0 && !effective)
+                stats++;
             for (int i = 0; i < stats; i++)
             {
                 Labels.Add(new TextSprite());
                 Labels[Labels.Count - 1].loc = new Vector2((i % 3) * 60, (i / 3) * 16);
                 if (i % 3 == 2)
                     Labels[Labels.Count - 1].loc += new Vector2(4, 0);
+                if (i % 3 == 3)
+                    Labels[Labels.Count - 1].loc += new Vector2(4, 0);
                 Labels[Labels.Count - 1].SetFont(Config.UI_FONT, Global.Content, "Yellow");
             }
             //@Yeti: handle weapon type replacement skills better than hardcoding
             bool knife = (actor != null && actor.has_skill("KNIFE") && weapon.main_type().Name == "Sword" && !weapon.is_magic());
             bool crossbow = (actor != null && actor.has_skill("CROSSBOW") && weapon.main_type().Name == "Bow" && !weapon.Ballista());
+            bool crit_bonus = kill_counter > 50;
 
             Labels[0].text = weapon.type;
             if (knife)
@@ -51,11 +58,13 @@ namespace Tactile
             Labels[1].text = "Rng";
             Labels[2].text = "Wgt";
             // If not a staff
-            if (!weapon.is_staff())
+            if (!weapon.is_staff() && !weapon.is_secondary_equip())
             {
                 Labels[3].text = "Mgt";
                 Labels[4].text = "Hit";
                 Labels[5].text = "Crit";
+                if (kill_counter > 0)
+                    Labels[6].text = "KO";
             }
             if (effective)
                 Labels[Labels.Count - 1].text = "Effective";
@@ -68,7 +77,10 @@ namespace Tactile
             Rank.SetFont(
                 weapon.Rank == Weapon_Ranks.None ? Config.UI_FONT : Config.UI_FONT + "L",
                 Global.Content, "Blue", Config.UI_FONT);
-            Rank.text = weapon.rank;
+            if (weapon.is_secondary_equip())
+                Rank.text = "--";
+            else
+                Rank.text = weapon.rank;
             // Range
             Stats.Add(new TextSprite());
             Stats[Stats.Count - 1].loc = new Vector2(92, 0);
@@ -82,12 +94,14 @@ namespace Tactile
                 Stats[0].text = min_range.ToString() + "-Mg/2";
                 Stats[0].offset = new Vector2(15, 0);
             }
+            if (weapon.is_secondary_equip())
+                Stats[0].text = "--";
             else
             {
                 if (min_range == max_range)
                     Stats[0].text = min_range.ToString();
                 else
-                    Stats[0].text = min_range.ToString() + "-" + max_range.ToString();
+                    Stats[0].text = min_range.ToString() + "~" + max_range.ToString();
                 Stats[0].offset = new Vector2(Stats[0].text.Length > 1 ? 12 : 0, 0);
             }
             for (int i = 2; i < stats; i++)
@@ -99,6 +113,9 @@ namespace Tactile
                 Stats[Stats.Count - 1].SetFont(Config.UI_FONT, Global.Content, "Blue");
             }
             // Wgt
+            if (weapon.is_secondary_equip() && weapon.Wgt == 0)
+                Stats[1].text = "--";
+            else
             Stats[1].text = weapon.Wgt.ToString();
             if (actor != null)
             {
@@ -116,7 +133,7 @@ namespace Tactile
                 }
             }
             // Stats
-            if (!weapon.is_staff())
+            if (!weapon.is_staff() && !weapon.is_secondary_equip())
             {
                 Stats[2].text = weapon.Mgt.ToString();
                 if (knife)
@@ -139,7 +156,18 @@ namespace Tactile
                     Stat_Bonuses[Stat_Bonuses.Count - 1].text = "+10";
                 }
                 Stats[4].text = weapon.Crt == -1 ? "--" : weapon.Crt.ToString();
+                if (crit_bonus)
+                {
+                    Stat_Bonuses.Add(new TextSprite());
+                    Stat_Bonuses[Stat_Bonuses.Count - 1].loc = Stats[4].loc - Stats[4].offset + new Vector2(0, 0);
+                    Stat_Bonuses[Stat_Bonuses.Count - 1].SetFont(
+                        Config.UI_FONT + "Bonus", Global.Content, "Green", Config.UI_FONT);
+                    Stat_Bonuses[Stat_Bonuses.Count - 1].text = "+" + (kill_counter - 50).ToString();
+                }
             }
+            // Kill Counter
+            if (kill_counter > 0)
+                Stats[5].text = kill_counter.ToString();
             if (effective)
                 for (int i = 0; i < weapon.Effectiveness.Length; i++)
                     if (weapon.Effectiveness[i] != 1)
@@ -148,14 +176,21 @@ namespace Tactile
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].texture = Global.Content.Load<Texture2D>(@"Graphics/Icons/Class_Types");
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].size = new Vector2(16, 16);
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].columns = 1;
-                        Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
-                            48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
+                        if (kill_counter > 0)
+                            Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
+                                64 + ((Effectiveness_Icons.Count - 1) * 16), 32);
+                        else
+                            Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
+                                48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].index = i;
 
                         Effectiveness_Multipliers.Add(new Effective_WT_Arrow());
                         Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].loc = new Vector2(
                             48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
-                        Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(8, 8);
+                        if (kill_counter > 0)
+                            Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(24, 8);
+                        else
+                            Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(8, 8);
                         Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].set_effectiveness(weapon.Effectiveness[i]);
                     }
         }

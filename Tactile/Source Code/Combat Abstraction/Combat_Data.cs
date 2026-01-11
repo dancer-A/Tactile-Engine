@@ -14,6 +14,7 @@ namespace Tactile
         public int Hp2, MaxHp2, Weapon_2_Id, Weapon_2_Uses = 0, Wexp2, Exp2, Exp_Gain2 = -1, Team2;
         public string Name1, Name2;
         public int Kill;
+        public bool Kill_Check = false;
         public List<KeyValuePair<Combat_Round_Data, List<Combat_Action_Data>>> Data =
             new List<KeyValuePair<Combat_Round_Data,List<Combat_Action_Data>>>();
         public int Distance;
@@ -80,7 +81,6 @@ namespace Tactile
             if (battler_2 != null)
                 battler_2.restore_state();
         }
-
         protected virtual void set_exp(Game_Unit battler_1, Game_Unit battler_2)
         {
             // Check if a battler has been killed
@@ -613,6 +613,7 @@ namespace Tactile
                 battler_2.charge_masteries(Game_Unit.MASTERY_RATE_BATTLE_END);
 
             use_weapons(battler_1, battler_2);
+            increase_kill_counter(battler_1, battler_2);
 
             battler_1.actor.clear_added_attacks();
             if (battler_2 != null)
@@ -666,6 +667,21 @@ namespace Tactile
                         battler_2.actor.level_up();
                     battler_2.actor.clear_wlvl_up();
                 }
+            }
+        }
+
+        protected virtual void increase_kill_counter(Game_Unit battler_1, Game_Unit battler_2)
+        {
+            if (!Global.game_system.In_Arena)
+            {
+                //if (Kill_Check)
+                //    return;
+                //Kill_Check = true;
+                // Check if a battler has been killed
+                if (Kill == 1)
+                    battler_2.weapon_kill_increase();
+                else if (Kill == 2)
+                    battler_1.weapon_kill_increase();
             }
         }
 
