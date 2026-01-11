@@ -705,7 +705,7 @@ namespace Tactile
 
         public Game_Map()
         {
-            map_edge_offsets = new Rectangle(2, 2, 4, 4); //Yeti
+            map_edge_offsets = new Rectangle(1, 1, 2, 2); //Yeti
             UnitsHidden = false;
             Teams = new List<List<int>>();
             Group_Names = new List<Dictionary<int, string>>();
@@ -3217,10 +3217,12 @@ namespace Tactile
                 }
         }
 
-        internal void add_shop(Vector2 loc, Shop_Data shop, bool home_base_shop = false)
+        internal void add_shop(Vector2 loc, Shop_Data shop, bool home_base_shop = false, bool repair = false)
         {
             if (home_base_shop)
                 Global.game_battalions.set_convoy_shop(shop);
+            else if (repair)
+                Global.game_battalions.set_repair_shop(shop);
             else
             {
                 if (shop.secret)

@@ -1118,6 +1118,16 @@ namespace Tactile
                 else
                     unit.drops_item = process_bool(command.Value[1]);
             }
+
+            // Value [2] (optional) item type
+            // Value [3] (optional) item id
+            if (command.Value.Length > 2)
+            {
+                int item_type = process_number(command.Value[2]);
+                int item_id = process_number(command.Value[3]);
+                unit.set_dropped_item((Item_Data_Type)item_type, item_id);
+            }
+
             Index++;
             return true;
         }
@@ -2350,11 +2360,12 @@ namespace Tactile
         private bool command_add_shop()
         {
             bool base_shop = false;
+            bool base_repair = false;
             Shop_Data shop;
             Vector2 loc = Vector2.Zero;
             if (command.Value.Length <= 4)
             {
-                // Value[0] = Store type (Base)
+                // Value[0] = Store type (Base) or Repair
                 // Value[1] = choice offsets
                 // Value[2] = face (optional)
                 // Value[3] = music (optional)
@@ -2372,7 +2383,16 @@ namespace Tactile
 
                         string face = command.Value.Length <= 2 ? "" : command.Value[2];
                         string music = command.Value.Length <= 3 ? "" : command.Value[3];
-                        shop = new Shop_Data(face, music, offsets, false, false);
+                        shop = new Shop_Data(face, music, offsets, false, false, false);
+                        break;
+                    case "Repair":
+                        base_repair = true;
+                        int[] offsets2 = command.Value[1].Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => process_number(x)).ToArray();
+
+                        string face2 = command.Value.Length <= 2 ? "" : command.Value[2];
+                        string music2 = command.Value.Length <= 3 ? "" : command.Value[3];
+                        shop = new Shop_Data(face2, music2, offsets2, false, false, true);
                         break;
                     default:
 #if DEBUG
@@ -2398,11 +2418,20 @@ namespace Tactile
                 string[] offsets_str = command.Value[4].Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < offsets.Length; i++)
                     offsets[i] = process_number(offsets_str[i]);*/
-                shop = new Shop_Data(command.Value[2], command.Value[3], offsets, process_bool(command.Value[5]), false);
+                shop = new Shop_Data(command.Value[2], command.Value[3], offsets, process_bool(command.Value[5]), false, false);
             }
-            command_shop_text(shop);
-            command_shop_inventory(shop);
-            Global.game_map.add_shop(loc, shop, base_shop);
+            if (command.Value[0] == "Repair")
+            {
+                command_shop_text(shop);
+                Global.game_map.add_shop(loc, shop, false, base_repair);
+
+            }
+            else
+            {
+                command_shop_text(shop);
+                command_shop_inventory(shop);
+                Global.game_map.add_shop(loc, shop, base_shop);
+            }
             Index++;
             return true;
         }
@@ -2420,7 +2449,7 @@ namespace Tactile
             string[] offsets_str = command.Value[4].Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < offsets.Length; i++)
                 offsets[i] = process_number(offsets_str[i]);
-            Shop_Data shop = new Shop_Data(command.Value[2], command.Value[3], offsets, false, true);
+            Shop_Data shop = new Shop_Data(command.Value[2], command.Value[3], offsets, false, true, false);
             command_shop_text(shop);
             Global.game_map.add_shop(loc, shop);
             Index++;
@@ -2782,6 +2811,37 @@ namespace Tactile
                         actor.transfer_blessing(source_actor);
                     }
                     break;
+                #endregion
+                case "AI Ignore":
+                #region Have the AI not acknowledge a specific unit
+                    // Value[1] = id
+                    // Value[2] = ignored unit id
+                    int ignorer_id = process_unit_id(command.Value[1]);
+                    int ignored_id = process_unit_id(command.Value[2]);
+
+                    Game_Unit ignorer_unit = null;
+                    if (ignorer_id == -1)
+                        if (Global.game_map.last_added_unit != null)
+                            ignorer_unit = Global.game_map.last_added_unit;
+                    if (Global.game_map.units.ContainsKey(ignorer_id))
+                        ignorer_unit = Global.game_map.units[ignorer_id];
+                    if (ignorer_unit != null)
+                        ignorer_unit.new_ai_ignore = ignored_id;
+
+                    break;
+                #endregion
+                case "Change Turn Theme":
+                #region Change Turn Theme
+                // Value[1] = Phase (i.e. player, enemy, ally, intruder)
+                // Value[2] = Song Name
+                Global.game_state.turn_theme_override[process_number(command.Value[1])] = command.Value[2];
+                break;
+                #endregion
+                case "Change Preparations Theme":
+                #region Change Preparations Theme
+                  // Value[1] = Song Name
+                  Global.game_state.preparations_theme_override = command.Value[1];
+                  break;
                 #endregion
 #if DEBUG
                 default:
@@ -3904,6 +3964,15 @@ namespace Tactile
                     get_actor(command.Value[1], command.Value[2], out actor);
                     if (actor != null)
                         result = actor.tier >= process_number(command.Value[3]);
+                    break;
+                case "Health":
+                case "HP":
+                    // Value[1] = id is for a unit, or for an actor?
+                    // Value[2] = id
+                    // Value[3] = level to check, returns true if actor level is greater than or equal
+                    get_actor(command.Value[1], command.Value[2], out actor);
+                    if (actor != null)
+                        result = actor.hp >= process_number(command.Value[3]);
                     break;
                 case "Weapon Level":
                 case "WLvl":

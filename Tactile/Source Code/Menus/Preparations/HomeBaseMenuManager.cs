@@ -13,7 +13,7 @@ using Tactile.Windows.UserInterface.Command;
 namespace Tactile.Menus.Preparations
 {
     enum HomeBaseChoices { Manage, Talk, Codex, Options, Save, None }
-    enum HomeBaseManageChoices { Organize, Trade, Support, None }
+    enum HomeBaseManageChoices { Organize, Trade, Arena, Support, None }
 
     class HomeBaseMenuManager : SetupMenuManager<IHomeBaseMenuHandler>
     {
@@ -55,7 +55,7 @@ namespace Tactile.Menus.Preparations
             // Command Window
             Vector2 manage_loc = optionLocation + new Vector2(48, 8);
             var manageCommandWindow = new Window_Command(manage_loc, 72,
-                new List<string> { "Organize", "Items", "Support" });
+                new List<string> { "Organize", "Items", "Arena", "Augury" });
             manageCommandWindow.text_offset = new Vector2(8, 0);
             manageCommandWindow.glow = true;
             manageCommandWindow.bar_offset = new Vector2(-8, 0);

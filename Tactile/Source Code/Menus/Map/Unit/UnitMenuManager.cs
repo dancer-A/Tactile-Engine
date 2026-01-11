@@ -232,7 +232,7 @@ namespace Tactile.Menus.Map.Unit
             Global.game_temp.reset_shop_call();
             
             Window_Business shopMenu;
-            if (shop.arena)
+            if (shop.arena || shop.blacksmith)
                 // Arenas shouldn't be previewed, but //@Debug
                 shopMenu = new Window_Arena(-1, shop, false);
             else
@@ -746,6 +746,23 @@ namespace Tactile.Menus.Map.Unit
                         {
                             Global.game_system.play_se(System_Sounds.Open);
                             unit.equip(itemIndex + 1);
+                        }
+                        unit.actor.organize_items();
+                        itemMenu.RefreshInventory();
+
+                        menu_Closed(itemOptionsMenu, e);
+                    }
+                    else if (unit.actor.is_secondary_equippable(Global.data_weapons[unit.actor.items[itemIndex].Id]))
+                    {
+                        if (itemOptionsMenu.Unequips)
+                        {
+                            Global.game_system.play_se(System_Sounds.Cancel);
+                            unit.actor.unequip_secondary();
+                        }
+                        else
+                        {
+                            Global.game_system.play_se(System_Sounds.Open);
+                            unit.equip_secondary(itemIndex + 1);
                         }
                         unit.actor.organize_items();
                         itemMenu.RefreshInventory();
@@ -1325,6 +1342,8 @@ namespace Tactile.Menus.Map.Unit
             var shop = Global.game_map.get_shop();
             if (shop.arena)
                 shopMenu = new Window_Arena(Global.game_system.Shopper_Id, shop, false);
+            if (shop.blacksmith)
+                shopMenu = new Window_Blacksmith(Global.game_system.Shopper_Id, shop);
             else
             {
                 int actor_id = Global.game_map.units[Global.game_system.Shopper_Id].actor.id;

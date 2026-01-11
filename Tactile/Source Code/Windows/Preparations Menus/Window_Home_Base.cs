@@ -13,6 +13,8 @@ namespace Tactile
     {
         public bool talk_events_exist { get { return Global.game_state.has_ready_base_events(); } }
 
+        public bool arena_opponents_exist {  get { return Global.game_state.arena_opponent_exists(); } }
+
         protected override Vector2 command_window_loc { get { return new Vector2(8, 40); } }
 
         internal override ConsumedInput selected_index
@@ -109,6 +111,13 @@ namespace Tactile
                 // Items
                 case HomeBaseManageChoices.Trade:
                     HelpText.text = Global.system_text["Prep Items"];
+                    break;
+                // Arena
+                case HomeBaseManageChoices.Arena:
+                    if (arena_opponents_exist)
+                        HelpText.text = Global.system_text["Prep Arena"];
+                    else
+                        HelpText.text = Global.system_text["Prep Disabled"];
                     break;
                 // Support
                 case HomeBaseManageChoices.Support:
