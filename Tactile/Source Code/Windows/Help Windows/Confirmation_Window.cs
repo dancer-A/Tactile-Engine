@@ -15,7 +15,7 @@ namespace Tactile.Windows.UserInterface.Command
         protected bool Skip = false;
         protected bool Active = true;
 
-        protected int SelectedIndex = -1;
+        protected ConsumedInput SelectedIndex;
         protected bool Canceled; 
 
         #region Accessors
@@ -163,16 +163,14 @@ namespace Tactile.Windows.UserInterface.Command
             }
         }
 
-        public Maybe<int> selected_index()
+        public ConsumedInput selected_index()
         {
-            if (SelectedIndex < 0)
-                return Maybe<int>.Nothing;
             return SelectedIndex;
         }
 
         public bool is_selected()
         {
-            return SelectedIndex >= 0;
+            return SelectedIndex.IsSomething;
         }
 
         public bool is_canceled()
@@ -182,8 +180,17 @@ namespace Tactile.Windows.UserInterface.Command
 
         public void reset_selected()
         {
-            SelectedIndex = -1;
+            SelectedIndex = new ConsumedInput();
             Canceled = false;
+        }
+
+        public void close()
+        {
+            Vector2 oldSize = Size;
+            this.size = new Vector2(26, 26);
+            // Hang on the original size for a moment
+            for (int i = 0; i < 12; i++)
+                Resize.Insert(0, oldSize);
         }
 
         public override void draw(SpriteBatch sprite_batch, Vector2 draw_offset = default(Vector2))
@@ -191,12 +198,14 @@ namespace Tactile.Windows.UserInterface.Command
             if (visible)
             {
                 base.draw(sprite_batch, draw_offset);
-                if (is_ready)
+                if (is_ready && this.ShouldDrawText)
                 {
                     sprite_batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                     if (Choices != null)
                         Choices.Draw(sprite_batch, draw_offset - (loc + draw_vector() + new Vector2(8, 8)));
-                    draw_cursor(sprite_batch, draw_offset);
+
+                    if (this.finished_moving)
+                        draw_cursor(sprite_batch, draw_offset);
                     sprite_batch.End();
                 }
             }

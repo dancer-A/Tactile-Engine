@@ -841,6 +841,8 @@ namespace Tactile
 
         public bool add_event(int id, bool run_lone_event, bool insert)
         {
+            TryResetPrompts();
+
             // If the event is already running
             foreach (Event_Processor processor in Events)
                 if (processor.key == Global.game_state.event_handler.name + id)
@@ -857,10 +859,24 @@ namespace Tactile
         }
         public void add_event(TactileLibrary.Event_Data event_data)
         {
+            TryResetPrompts();
+
             Events.Add(new Event_Processor(event_data));
             if (Events.Count == 1)
                 update_event(0);
         }
+
+        private void TryResetPrompts()
+        {
+            // Called when adding new events
+            // If there are no events already running, reset the prompt results to nothing
+            if (!Events.Any())
+            {
+                Global.game_temp.LastDialoguePrompt = TactileLibrary.Maybe<int>.Nothing;
+                Global.game_temp.LastConfirmationPrompt = TactileLibrary.Maybe<bool>.Nothing;
+            }
+        }
+
 
         /// <summary>
         /// Sets the parent id of the currently running event
@@ -1013,16 +1029,20 @@ namespace Tactile
 
         public void update()
         {
+            const int MAX_TICKS = 100 * 60 * 60 * Config.FRAME_RATE;
+
             Total_Play_Time++;
             // If past 99:59:59
-            if (Total_Play_Time >= 100 * 60 * 60 * Config.FRAME_RATE)
+            if (Total_Play_Time >= MAX_TICKS)
                 // Lock time
                 Total_Play_Time -= Config.FRAME_RATE;
+
             Chapter_Play_Time++;
             // If past 99:59:59
-            if (Chapter_Play_Time >= 100 * 60 * 60 * Config.FRAME_RATE)
+            if (Chapter_Play_Time >= MAX_TICKS)
                 // Lock time
                 Chapter_Play_Time -= Config.FRAME_RATE;
+
             update_timers();
             update_victory();
             update_events();

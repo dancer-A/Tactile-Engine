@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TactileConfig</RootNamespace>
+    <RootNamespace>Tactile</RootNamespace>
     <AssemblyName>TactileConfig</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source Code\ClassTypeSet.cs" />
+    <Compile Include="Source Code\EventControlBlockDef.cs" />
+    <Compile Include="Source Code\EventControlBlock.cs" />
     <Compile Include="Source Code\FaceCountryRecolor.cs" />
     <Compile Include="Source Code\FaceToGeneric.cs" />
     <Compile Include="Source Code\Static Classes\Config Data\Battler Animation\Face_Recolor.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Source Code\Static Classes\Config Data\Terrain_Data.cs" />
     <Compile Include="Source Code\Static Classes\Config Data\Weapon_Triangle.cs" />
     <Compile Include="Source Code\World_Map_Chapter.cs" />
+    <Compile Include="UnitScreenData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TactileLibrary\TactileLibrary.csproj">

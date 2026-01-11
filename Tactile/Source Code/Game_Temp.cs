@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Tactile.Windows.Map.Info;
 using TactileLibrary;
-using System;
 
 namespace Tactile
 {
@@ -11,9 +11,11 @@ namespace Tactile
         public int dying_unit_id = -1;
         public string message_text = null;
         public bool boss_theme = false;
+        public MapHelpButtonInputs MapHelpInput;
         // Menu Calls
         public bool menuing = false;
         public bool discard_menuing = false;
+        public bool prompt_menuing = false;
         public bool menu_call = false;
         public bool map_menu_call = false;
         public bool end_turn_highlit = false;
@@ -31,6 +33,8 @@ namespace Tactile
         public bool scripted_battle = false;
         public int preparations_item_index;
         internal Scripted_Combat_Script scripted_battle_stats;
+        public Maybe<int> LastDialoguePrompt = Maybe<int>.Nothing;
+        public Maybe<bool> LastConfirmationPrompt = Maybe<bool>.Nothing;
         // Context sensitive unit control
         public Maybe<Vector2> SelectedMoveLoc { get; private set; }
         public Maybe<int> SelectedMoveMenuChoice { get; private set; }
