@@ -189,17 +189,24 @@ namespace Tactile
                         #region Regular Weapons
                         if (weapon_index != Global.ActorConfig.NumItems)
                         {
-                            targetUses = check_target(
+                            if (!attacker.ai_ignores(targetId)) //change this to just check if the target's id is not in the list of targets to ignore <-- new
+                            {
+                                targetUses = check_target(
                                 attacker, targetUnit, can_move, best, retreating,
                                 damage_test, retreat_loc, weapon_index);
+                            }
+
                         }
                         #endregion
                         #region Siege Weapons
                         else
                         {
-                            targetUses = check_siege_target(
+                            if (!attacker.ai_ignores(targetId)) //change this to just check if the target's id is not in the list of targets to ignore <-- new
+                            {
+                                targetUses = check_siege_target(
                                 attacker, targetUnit, can_move, best,
                                 damage_test, weapon_index);
+                            }
                         }
                         #endregion
                     }

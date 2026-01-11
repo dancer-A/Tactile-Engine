@@ -23,7 +23,7 @@ namespace TactileWeaponExtension
 
         public static bool has_anima_start(this Data_Weapon weapon)
         {
-            return (TactileLibrary.Data_Weapon.ANIMA_TYPES.Contains((int)weapon.Main_Type) && new List<int> { 1, 2, 3 }.Contains((int)weapon.Rank)) ||
+            return (TactileLibrary.Data_Weapon.ANIMA_TYPES.Contains((int)weapon.Main_Type) && new List<int> { 3, 4, 5, 6 }.Contains((int)weapon.Rank)) ||
                 (TactileLibrary.Data_Weapon.ANIMA_TYPES.Contains((int)weapon.Scnd_Type) && new List<int> { 1, 2, 3, 4, 5 }.Contains((int)weapon.Rank)); //Debug
         }
 

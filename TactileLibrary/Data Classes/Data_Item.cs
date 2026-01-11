@@ -9,8 +9,8 @@ using ListExtension;
 namespace TactileLibrary
 {
     public enum Placeables { None, Mine, Light_Rune }
-    public enum Buffs { Pow, Skl, Spd, Lck, Def, Res, Mov, Con }
-    public enum Boosts { MaxHp, Pow, Skl, Spd, Lck, Def, Res, Mov, Con, WLvl, WExp }
+    public enum Buffs { Str, Mag, Skl, Spd, Lck, Def, Res, Mov, Con }
+    public enum Boosts { MaxHp, Str, Mag, Skl, Spd, Lck, Def, Res, Mov, Con, WLvl, WExp }
     public partial class Data_Item : Data_Equipment
     {
         public int Heal_Val = 10;
@@ -25,9 +25,9 @@ namespace TactileLibrary
         [ContentSerializer(ElementName = "Repair_Rate")]
         public float Repair_Percent = 0f;
         public string Boost_Text = "";
-        public int[] Stat_Boost = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        public int[] Growth_Boost = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-        public int[] Stat_Buff = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] Stat_Boost = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] Growth_Boost = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] Stat_Buff = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public List<int> Promotes = new List<int>();
 
         #region TactileDataContent

@@ -6,7 +6,7 @@ namespace Tactile
 {
     public enum Mode_Styles { Casual, Standard, Classic }
     public enum Difficulty_Modes { Normal, Hard }// , Lunatic } // Lunatic_Plus? //Debug
-    public enum Stat_Labels { Hp, Pow, Skl, Spd, Lck, Def, Res, Con, Mov }
+    public enum Stat_Labels { Hp, Str, Mag, Skl, Spd, Lck, Def, Res, Con, Mov }
     public enum Combat_Stat_Labels { Dmg, Def, Hit, Avo, Crt, Dod }
     public enum Convoy_Stack_Types { None, Use, Full }
     public enum Gladiators
@@ -234,17 +234,19 @@ namespace Tactile
         public readonly static ClassTypes[] CLASS_TYPE_ICONS = new ClassTypes[] { // Class types that have icons for effectiveness
             ClassTypes.Cavalry, ClassTypes.Armor, ClassTypes.Flier, ClassTypes.FDragon, ClassTypes.Swordsman, ClassTypes.Dragon, ClassTypes.Mage };
 
-        public readonly static HashSet<ClassTypes> IGNORE_TERRAIN_AVO = new HashSet<ClassTypes> { ClassTypes.Cavalry, ClassTypes.Flier };
+        public readonly static HashSet<ClassTypes> IGNORE_TERRAIN_AVO = new HashSet<ClassTypes> { ClassTypes.Flier };
         public readonly static HashSet<ClassTypes> IGNORE_TERRAIN_DEF = new HashSet<ClassTypes> { ClassTypes.Flier };
+        public readonly static HashSet<ClassTypes> HALVE_TERRAIN_AVO = new HashSet<ClassTypes> { ClassTypes.Cavalry };
+        public readonly static HashSet<ClassTypes> HALVE_TERRAIN_DEF = new HashSet<ClassTypes> { ClassTypes.Cavalry };
 
 
 
         // This should really be pretty much anywhere else //Yeti
         public static int DEFAULT_VISION_RANGE = 3;
         public readonly static Dictionary<int, int> CLASS_VISION_BONUS = new Dictionary<int, int> {
-            { 17, 5 }, // Thief
-            { 52, 5 }, // Assassin
-            { 53, 5 } // Rogue
+            { 11, 5 }, // Thief
+            { 12, 5 }, // Rogue
+            { 69, 5 } // Assassin
         };
         public const int FLARE_VISION = 5; // Base vision range for Flare staff
         #endregion

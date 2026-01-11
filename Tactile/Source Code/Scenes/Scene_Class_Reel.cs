@@ -150,19 +150,21 @@ namespace Tactile
                 Stat_Labels[i].stereoscopic = Config.REEL_STATS_DEPTH;
             }
             Stat_Labels[0].text = "HP";
-            Stat_Labels[2].text = "Skl";
-            Stat_Labels[3].text = "Spd";
+            Stat_Labels[1].text = "Str"; // Skitty
+            Stat_Labels[2].text = "Mag"; // Skitty
+            Stat_Labels[3].text = "Dex";
+            Stat_Labels[4].text = "Spd";
             if (Class_Reel_Data.SKIP_LCK)
             {
-                Stat_Labels[4].text = "Def";
-                Stat_Labels[5].text = "Res";
-                Stat_Labels[6].text = "Con";
+                Stat_Labels[5].text = "Def";
+                Stat_Labels[6].text = "Res";
+                Stat_Labels[7].text = "Bld";
             }
             else
             {
-                Stat_Labels[4].text = "Lck";
-                Stat_Labels[5].text = "Def";
-                Stat_Labels[6].text = "Res";
+                Stat_Labels[5].text = "Lck";
+                Stat_Labels[6].text = "Def";
+                Stat_Labels[7].text = "Res";
             }
             // Stat Labels
             for (int i = 0; i < Stat_Values.Length; i++)
@@ -299,18 +301,18 @@ namespace Tactile
                 Stat_Bars[i].stat = Stats[i];
                 Stat_Values[i].text = Stats[i].ToString();
             }
-            switch (Unit.actor.power_type())
-            {
-                case Power_Types.Strength:
-                    Stat_Labels[1].text = "Str";
-                    break;
-                case Power_Types.Magic:
-                    Stat_Labels[1].text = "Mag";
-                    break;
-                case Power_Types.Power:
-                    Stat_Labels[1].text = "Pow";
-                    break;
-            }
+            //switch (Unit.actor.power_type())
+            //{
+            //    case Power_Types.Strength:
+            //        Stat_Labels[1].text = "Str";
+            //        break;
+            //    case Power_Types.Magic:
+            //        Stat_Labels[1].text = "Mag";
+            //        break;
+            //    case Power_Types.Power:
+            //        Stat_Labels[1].text = "Pow";
+            //        break;
+            //}
             // Weapon types
             Weapon_Icons.Clear();
             List<int> weapon_types = Unit.actor.weapon_types();

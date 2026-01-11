@@ -75,8 +75,8 @@ namespace Tactile.Graphics.Preparations
                 Stats.Last().loc = loc;
                 Stats.Last().stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
 
-                if (stat_label == Stat_Labels.Pow)
-                    PowNode = Stats.Last() as StatusStatUINode;
+                //if (stat_label == Stat_Labels.Pow)
+                //    PowNode = Stats.Last() as StatusStatUINode;
             }
 
             set_images(unit);
@@ -95,19 +95,19 @@ namespace Tactile.Graphics.Preparations
         {
             Game_Actor actor = unit.actor;
 
-            // Stats
-            switch (actor.power_type())
-            {
-                case Power_Types.Strength:
-                    PowNode.set_label("Str");
-                    break;
-                case Power_Types.Magic:
-                    PowNode.set_label("Mag");
-                    break;
-                default:
-                    PowNode.set_label("Pow");
-                    break;
-            }
+            //// Stats
+            //switch (actor.power_type())
+            //{
+            //    case Power_Types.Strength:
+            //        PowNode.set_label("Str");
+            //        break;
+            //    case Power_Types.Magic:
+            //        PowNode.set_label("Mag");
+            //        break;
+            //    default:
+            //        PowNode.set_label("Pow");
+            //        break;
+            //}
 
             // Refresh UI nodes
             foreach (StatusUINode node in Stats)

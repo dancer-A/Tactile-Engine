@@ -80,7 +80,7 @@ namespace Tactile.Windows.Command
                 string color = "Green";
                 // Equip
                 if (Index_Redirect[i] == 0 &&
-                    !unit.actor.is_equippable(Global.data_weapons[item_data.Id]))
+                    !(unit.actor.is_equippable(Global.data_weapons[item_data.Id]) || unit.actor.is_secondary_equippable(Global.data_weapons[item_data.Id])))
                     color = "Grey";
                 // Use
                 else if (Index_Redirect[i] == 1)

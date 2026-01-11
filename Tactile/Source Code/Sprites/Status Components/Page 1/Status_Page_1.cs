@@ -28,14 +28,14 @@ namespace Tactile
             Stats_Window.height = 112;
             Stats_Window.stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
             // Stats
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 7; i++)
             {
                 string help_label;
                 string label;
 
                 var stat_label = (Stat_Labels)i + 1;
 
-                Vector2 loc = Stats_Window.loc + new Vector2(8, i * 16 + 8);
+                Vector2 loc = Stats_Window.loc + new Vector2(8, i * 14 + 6);
                 PrimaryStatState.label((Stat_Labels)i + 1, out label, out help_label);
 
                 Func<Game_Unit, PrimaryStatState> stat_formula = (Game_Unit unit) =>
@@ -62,8 +62,8 @@ namespace Tactile
                 nodes.Last().set_cheat(stat_cheat(stat_label));
 #endif
 
-                if (stat_label == Stat_Labels.Pow)
-                    PowNode = nodes.Last() as StatusStatUINode;
+                //if (stat_label == Stat_Labels.Pow)
+                //    PowNode = nodes.Last() as StatusStatUINode;
             }
 
             // Move
@@ -94,8 +94,8 @@ namespace Tactile
 #endif
             // Con
             nodes.Add(new StatusPrimaryStatUINode(
-                "Con",
-                "Con",
+                "Bld",
+                "Bld",
                 (Game_Unit unit) =>
                 {
                     return new PrimaryStatState
@@ -112,6 +112,25 @@ namespace Tactile
 #if DEBUG
             nodes.Last().set_cheat(stat_cheat(Stat_Labels.Con));
 #endif
+            nodes.Add(new StatusTravelerUINode(
+                "Trv",
+                "Trv",
+                (Game_Unit unit) =>
+                {
+                    if (unit.is_rescued)
+                        return Global.game_map.units[unit.rescued].actor.name;
+                    else if (unit.is_rescuing)
+                        return Global.game_map.units[unit.rescuing].actor.name;
+                    return "---";
+                },
+                (Game_Unit unit) =>
+                {
+                    if (!unit.is_rescuing)
+                        return 0;
+                    return Global.game_map.units[unit.rescuing].team;
+                }, 24));
+            nodes.Last().loc = Stats_Window.loc + new Vector2(72, 2 * 16 + 8);
+            nodes.Last().stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
             // Aid
             nodes.Add(new StatusAidUINode(
                 "Aid",
@@ -131,28 +150,9 @@ namespace Tactile
                     else
                         return 0;
                 }, 40));
-            nodes.Last().loc = Stats_Window.loc + new Vector2(72, 2 * 16 + 8);
-            nodes.Last().stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
-            // Trv
-            nodes.Add(new StatusTravelerUINode(
-                "Trv",
-                "Trv",
-                (Game_Unit unit) =>
-                {
-                    if (unit.is_rescued)
-                        return Global.game_map.units[unit.rescued].actor.name;
-                    else if (unit.is_rescuing)
-                        return Global.game_map.units[unit.rescuing].actor.name;
-                    return "---";
-                },
-                (Game_Unit unit) =>
-                {
-                    if (!unit.is_rescuing)
-                        return 0;
-                    return Global.game_map.units[unit.rescuing].team;
-                }, 24));
             nodes.Last().loc = Stats_Window.loc + new Vector2(72, 3 * 16 + 8);
             nodes.Last().stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
+            // Trv
             // Type
             nodes.Add(new StatusClassTypesUINode(
                 "Type",
@@ -203,8 +203,8 @@ namespace Tactile
                         return new ItemState
                         {
                             Item = unit.actor.items[j],
-                            Drops = unit.drops_item && j == unit.actor.num_items - 1,
-                            Equipped = unit.actor.equipped - 1 == j
+                            Drops = unit.drops_item && j == unit.actor.dropped_item,
+                            Equipped = (unit.actor.equipped - 1 == j) || (unit.actor.secondary_equipped - 1 == j)
                         };
                     }));
                 nodes.Last().loc = loc;
@@ -350,18 +350,18 @@ namespace Tactile
         {
             Game_Actor actor = unit.actor;
             // Stats
-            switch (actor.power_type())
-            {
-                case Power_Types.Strength:
-                    PowNode.set_label("Str");
-                    break;
-                case Power_Types.Magic:
-                    PowNode.set_label("Mag");
-                    break;
-                default:
-                    PowNode.set_label("Pow");
-                    break;
-            }
+            //switch (actor.power_type())
+            //{
+            //    case Power_Types.Strength:
+            //        PowNode.set_label("Str");
+            //        break;
+            //    case Power_Types.Magic:
+            //        PowNode.set_label("Mag");
+            //        break;
+            //    default:
+            //        PowNode.set_label("Pow");
+            //        break;
+            //}
 
             SiegeBg.visible = !unit.actor.is_full_items && unit.is_on_siege();
 

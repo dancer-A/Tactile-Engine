@@ -51,7 +51,7 @@ namespace Tactile
         {
             bool useable;
             if (item.is_weapon && actor != null)
-                useable = actor.is_equippable(item as Data_Weapon);
+                useable = actor.is_equippable(item as Data_Weapon) || actor.is_secondary_equippable(item as Data_Weapon);
             else
                 useable = true;
 

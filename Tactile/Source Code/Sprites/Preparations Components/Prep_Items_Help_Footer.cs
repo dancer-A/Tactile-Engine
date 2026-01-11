@@ -96,8 +96,8 @@ namespace Tactile.Graphics.Preparations
 
         private void refresh_equippable(Game_Unit unit, Data_Weapon weapon)
         {
-            string color = unit.actor.is_equippable(weapon) ? "Blue" : "Grey";
-            foreach(var stat in Stats)
+            string color = unit.actor.is_equippable(weapon) || unit.actor.is_secondary_equippable(weapon) ? "Blue" : "Grey";
+            foreach (var stat in Stats)
             {
                 stat.SetColor(Global.Content, color);
             }

@@ -403,7 +403,7 @@ namespace Tactile
             if (Target_Timer > -1)
             {
                 // Should the cursor be a different color during events/pre-chapter? //Debug
-                Facing = 4; //battle_map? 4 : 2 //Yeti
+                Facing = 2; //battle_map? 4 : 2 //Yeti
                 return false;
             }
             return true;

@@ -59,7 +59,7 @@ namespace Tactile
 
     class Test_Battle_Character_Data
     {
-        private const int DEFAULT_CLASS_ID = 16;
+        private const int DEFAULT_CLASS_ID = 5;
 
         internal static int default_class_id
         {

@@ -39,12 +39,13 @@ namespace Tactile
             Staff_Range = new HashSet<Vector2>(), Talk_Range = new HashSet<Vector2>();
         protected List<Vector2> Move_Route = new List<Vector2>();
         protected int Mission = 0, Ai_Mission = 2;
+        protected List<int> Ai_Ignore = new List<int> { -1 };
         protected bool Dead = false;
-        protected bool Boss = false, Drops_Item = false;
+        protected bool Boss = false; // edited, might need this back for the icons
         protected int Priority = 0;
         protected bool Gladiator = false;
         protected int Vision_Bonus = 0;
-        protected List<int> Stat_Bonuses = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 }; // Make this determine the proper length //Debug
+        protected List<int> Stat_Bonuses = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // Make this determine the proper length //Debug
         protected bool Blocked = false;
         protected bool Using_Siege_Engine = false;
         protected HashSet<int> Attack_Targets_This_Turn = new HashSet<int>();
@@ -104,9 +105,10 @@ namespace Tactile
             Move_Route.write(writer);
             writer.Write(Mission);
             writer.Write(Ai_Mission);
+            Ai_Ignore.write(writer);
             writer.Write(Dead);
             writer.Write(Boss);
-            writer.Write(Drops_Item);
+            // writer.Write(Drops_Item); might need this back
             writer.Write(Priority);
             writer.Write(Gladiator);
             writer.Write(Vision_Bonus);
@@ -157,9 +159,10 @@ namespace Tactile
             Move_Route.read(reader);
             Mission = reader.ReadInt32();
             Ai_Mission = reader.ReadInt32();
+            Ai_Ignore.read(reader);
             Dead = reader.ReadBoolean();
             Boss = reader.ReadBoolean();
-            Drops_Item = reader.ReadBoolean();
+            // Drops_Item = reader.ReadBoolean(); might need this back
             Priority = reader.ReadInt32();
             Gladiator = reader.ReadBoolean();
             Vision_Bonus = reader.ReadInt32();
@@ -361,6 +364,18 @@ namespace Tactile
             get { return Ai_Mission; }
             set { Ai_Mission = value; }
         }
+
+        public bool ai_ignores(int id)
+        {
+            return Ai_Ignore.Contains(id);
+        }
+        public int new_ai_ignore
+        {
+            set
+            {
+                Ai_Ignore.Add(value);
+            }
+        }
         public int ai_mission
         {
             get { return Ai_Mission % Game_AI.MISSION_COUNT; }
@@ -380,11 +395,28 @@ namespace Tactile
 
         public bool drops_item
         {
-            get { return Drops_Item && actor.has_items; }
-            set { Drops_Item = value; }
+            get { return actor.drops_item && actor.has_items; }
+            set { actor.drops_item = value; }
         }
 
-        public int priority
+        public void set_dropped_item(Item_Data_Type type, int id)
+        {
+            foreach (Item_Data item in actor.items)
+                if (item.Type == type && item.Id == id)
+                {
+                    item.Drops = true;
+                    break;
+                }
+            // What should happen if no appropriate item is found?
+            // Perhaps change drops_item back to false?
+        }
+        public void clear_dropped_item()
+        {
+            foreach (Item_Data item in actor.items)
+                item.Drops = false;
+        }
+
+public int priority
         {
             get { return Priority; }
             set { Priority = value; }
@@ -465,6 +497,7 @@ namespace Tactile
         protected void initialize(int id, Vector2 loc, int team)
         {
             //actor.setup_items(false); //Debug
+            actor.drops_item = false; // I think this is necessary to prevent the game from "remembering" item drops from previous chapters //gooseish
             Id = id;
             Turn_Start_Loc = Prev_Loc = Move_Loc = Loc = loc;
             refresh_real_loc();
@@ -473,6 +506,7 @@ namespace Tactile
         protected void initialize(int id, Vector2 loc, int team, int priority)
         {
             //actor.setup_items(false); // Doing this once in the Game_Actor constructor instead //Debug
+            actor.drops_item = false; // I think this is necessary to prevent the game from "remembering" item drops from previous chapters //gooseish
             Id = id;
             Turn_Start_Loc = Prev_Loc = Move_Loc = Loc = loc;
             refresh_real_loc();
@@ -493,7 +527,7 @@ namespace Tactile
             Team = team;
             // Clear item drop flag if switching to an allied team
             if (!is_attackable_team(Constants.Team.PLAYER_TEAM))
-                Drops_Item = false;
+                drops_item = false;
 
             if (!Global.scene.is_test_battle)
             {
@@ -620,7 +654,8 @@ namespace Tactile
             {
                 case Stat_Labels.Hp:
                     return actor.stat(stat); //Yeti
-                case Stat_Labels.Pow:
+                case Stat_Labels.Str:
+                case Stat_Labels.Mag:
                 case Stat_Labels.Lck:
                 case Stat_Labels.Def:
                 case Stat_Labels.Res:
@@ -675,20 +710,22 @@ namespace Tactile
             if (weapon.is_staff() && weapon.Heals())
             {
                 int base_stat = Constants.Combat.STAFF_HEAL_WITH_RES ?
-                    stat(Stat_Labels.Res) : stat(Stat_Labels.Pow);
+                    stat(Stat_Labels.Res) : stat(Stat_Labels.Mag);
                 return (int)(base_stat * Constants.Combat.STAFF_HEAL_POW_RATE);
             }
             // MWeapons
             else if (Constants.Combat.IMBUE_WITH_RES && magic &&
                     actor.power_type() == Power_Types.Strength) // == str or != mag ? //Debug
                 return stat(Stat_Labels.Res);
-
-            return stat(Stat_Labels.Pow);
+            // Magic
+            if (magic || weapon.is_magic())
+                return stat(Stat_Labels.Mag);
+            return stat(Stat_Labels.Str);
         }
 
         protected int mag_range_pow(Data_Weapon weapon, bool magic)
         {
-            return stat(Stat_Labels.Pow);
+            return stat(Stat_Labels.Mag);
         }
 
         protected int spd()
@@ -751,9 +788,19 @@ namespace Tactile
             return Config.IGNORE_TERRAIN_DEF.Intersect(actor.actor_class.Class_Types).Any();
         }
 
+        private bool halve_terrain_def()
+        {
+            return Config.HALVE_TERRAIN_DEF.Intersect(actor.actor_class.Class_Types).Any();
+        }
+
         private bool ignore_terrain_avo()
         {
             return Config.IGNORE_TERRAIN_AVO.Intersect(actor.actor_class.Class_Types).Any();
+        }
+
+        private bool halve_terrain_avo()
+        {
+            return Config.HALVE_TERRAIN_AVO.Intersect(actor.actor_class.Class_Types).Any();
         }
 
         internal int terrain_def_bonus()
@@ -782,6 +829,9 @@ namespace Tactile
             if (target != null && !nihil(target))
                 if (actor.has_skill("CMNDO"))
                     result = result.ValueOrDefault + (terrainDef / 2);
+            // If terrain is halved, return half of the terrain bonus
+            if (target != null && halve_terrain_def())
+                return terrainDef / 2;
             // If terrain is ignored, return the result so far
             if (target != null && ignore_terrain_def())
                 return result;
@@ -815,6 +865,9 @@ namespace Tactile
             if (target != null && !nihil(target))
                 if (actor.has_skill("CMNDO"))
                     result = result.ValueOrDefault + (terrainRes / 2);
+            // If terrain is halved, return half of the terrain bonus
+            if (target != null && halve_terrain_def())
+                return terrainRes / 2;
             // If terrain is ignored, return the result so far
             if (ignore_terrain_def())
                 //if (target != null && ignore_terrain_def()) //Debug
@@ -849,6 +902,9 @@ namespace Tactile
             if (target != null && !nihil(target))
                 if (actor.has_skill("CMNDO"))
                     result = result.ValueOrDefault + (terrainAvo / 2);
+            // If terrain is halved, return half of the terrain bonus
+            if (halve_terrain_avo())
+                return terrainAvo / 2;
             // If terrain is ignored, return the result so far
             if (ignore_terrain_avo())
                 //if (target != null && ignore_terrain_avo()) //Debug
@@ -880,7 +936,13 @@ namespace Tactile
                 return 0;
             Data_Weapon weapon = Global.data_weapons[weapon_id];
             int wgt = actor.weapon_wgt(weapon);
-            return (int)(stat(Stat_Labels.Con) < wgt ? wgt - stat(Stat_Labels.Con) : 0);
+            if (actor.secondary_equip != null)
+                if (Global.data_weapons.ContainsKey(actor.secondary_equip_id))
+                {
+                    wgt += actor.weapon_wgt(actor.secondary_equip);
+                }
+            int wgt_factor = stat(Stat_Labels.Con) / 2;
+            return (wgt_factor < wgt ? wgt - wgt_factor : 0);
         }
 
         public int aid()
@@ -945,8 +1007,10 @@ namespace Tactile
             {
                 case Stat_Labels.Hp:
                     return 0; //Debug
-                case Stat_Labels.Pow:
-                    return pow_bonus_skill + temporary_stat_buff(Buffs.Pow);
+                case Stat_Labels.Str:
+                    return str_bonus_skill + temporary_stat_buff(Buffs.Str);
+                case Stat_Labels.Mag:
+                    return mag_bonus_skill + temporary_stat_buff(Buffs.Mag);
                 case Stat_Labels.Skl:
                     return skl_bonus_skill + temporary_stat_buff(Buffs.Skl);
                 case Stat_Labels.Spd:
@@ -1135,7 +1199,17 @@ namespace Tactile
             }
         }
 
-        public bool is_weapon_broke()
+        public void equip_secondary(int index)
+        {
+            if (actor.in_equip_range(index))
+                actor.equip_secondary(index);
+            else
+            {
+                actor.secondary_equip_id = this.items[index - 1].Id;
+            }
+        }
+
+        public bool is_weapon_broke() // fe4
         {
             return is_weapon_broke(0);
         }
@@ -1195,7 +1269,7 @@ namespace Tactile
                 if (this.berserk)
                     return true;
 
-                if (Drops_Item || this.boss || !actor.is_generic_actor)
+                if (drops_item || this.boss || !actor.is_generic_actor)
                     return true;
                 return false;
             }
@@ -1571,17 +1645,27 @@ namespace Tactile
             int spd = atk_spd(distance, weapon);
             if (weapon.Ballista() && Constants.Gameplay.SIEGE_RELOADING)
                 return 1;
+            if ((target as Game_Unit).actor.has_skill("WARY") && !actor.has_skill("PURSUIT") && !nihil(this))
+                return 1;
             return attacks_per_round(spd, target, distance);
         }
         private int attacks_per_round(int spd, Combat_Map_Object target, int distance)
         {
             if (target.is_unit() && !is_double_disabled())
-            {
-                int target_spd = (target as Game_Unit).atk_spd(distance);
-                // If enough faster than the opponent, attack twice
-                if (spd - Constants.Combat.DBL_ATK_SPD >= target_spd)
-                    return 2;
-            }
+                if (!stop_follow_up_modifiers(target as Game_Unit) && !(target as Game_Unit).stop_follow_up_modifiers(this))
+                {
+                    int target_spd = (target as Game_Unit).atk_spd(distance);
+                    // Charge is active
+                    always_follow_up_modifiers(target as Game_Unit);
+                    if (Charge_Active)
+                        return 1 + 1;
+                    // If enough faster than the opponent, attack twice, blocked if opponent charge is active
+                    if (actor.has_skill("PURSUIT") && spd > target_spd)
+                        if (!(target as Game_Unit).Charge_Active)
+                            return 2;
+                    if (spd - Constants.Combat.DBL_ATK_SPD >= target_spd)
+                        return 2;
+                }
             return 1;
         }
 
@@ -1655,6 +1739,10 @@ namespace Tactile
                 actor.weapon_use();
         }
 
+        public void weapon_kill_increase()
+        {
+            actor.weapon_kill_increase();
+        }
         public bool mounted()
         {
             return Config.MOUNTED_CLASS_TYPES.Any(x => x.Types.Intersect(actor.actor_class.Class_Types).Count() == x.Types.Count); //Yeti
@@ -1688,34 +1776,31 @@ namespace Tactile
                 return;
             switch (actor.id)
             {
-                // Tesla
-                case 104:
-                    actor.gain_stat(Stat_Labels.Hp, 2);
-                    actor.gain_stat(Stat_Labels.Def, 1);
-                    break;
-
-                // Boston
-                case 175:
-                    actor.gain_stat(Stat_Labels.Pow, 2);
+                // Dimaggio
+                case 101:
+                    actor.gain_stat(Stat_Labels.Hp, 5);
+                    actor.gain_stat(Stat_Labels.Str, 2);
                     actor.gain_stat(Stat_Labels.Skl, 1);
                     actor.gain_stat(Stat_Labels.Spd, 1);
-                    actor.gain_stat(Stat_Labels.Def, 3);
+                    actor.gain_stat(Stat_Labels.Lck, 2);
+                    actor.gain_stat(Stat_Labels.Def, 2);
                     actor.gain_stat(Stat_Labels.Res, 1);
                     break;
-                // Crane
+
+                // Gerrard
+                case 102:
+                    actor.gain_stat(Stat_Labels.Hp, 7);
+                    actor.gain_stat(Stat_Labels.Str, 3);
+                    actor.gain_stat(Stat_Labels.Skl, 2);
+                    actor.gain_stat(Stat_Labels.Spd, 2);
+                    actor.gain_stat(Stat_Labels.Lck, 1);
+                    actor.gain_stat(Stat_Labels.Def, 1);
+                    break;
+                // Munnir
                 case 182:
                     actor.gain_stat(Stat_Labels.Hp, 6);
                     actor.hp += 6;
                     actor.gain_stat(Stat_Labels.Def, 2);
-                    break;
-                // Stephen
-                case 183:
-                    actor.gain_stat(Stat_Labels.Hp, 4);
-                    actor.hp += 4;
-                    actor.gain_stat(Stat_Labels.Pow, 3);
-                    actor.gain_stat(Stat_Labels.Lck, 3);
-                    actor.gain_stat(Stat_Labels.Def, 1);
-                    actor.gain_stat(Stat_Labels.Res, 3);
                     break;
             }
         }
@@ -3693,11 +3778,14 @@ namespace Tactile
 
         public bool can_rescue(Game_Unit target)
         {
+            // Needs to have Savior skill
+            if (!actor.has_skill("SAVIOR") && !actor.has_skill("HEROISM"))
+                return false;
             // If already rescuing/being rescued, lol no
             if (is_rescuing || is_rescued)
                 return false;
-            // Must be allied teams
-            if (is_attackable_team(target))
+            // Must be on the same teams
+            if (!same_team(target))
                 return false;
             // Don't rescue units that are already themselves rescuing
             if (target.is_rescuing)
@@ -3705,7 +3793,7 @@ namespace Tactile
             // If the target is a player unit, only other player units can rescue them
             if (target.is_player_team && !this.is_player_team)
                 return false;
-            return actor.mov > 0 && aid() >= target.stat(Stat_Labels.Con);
+            return actor.mov > 0; // aid no longer required to rescue
         }
 
         protected override Vector2 real_loc_on_map()

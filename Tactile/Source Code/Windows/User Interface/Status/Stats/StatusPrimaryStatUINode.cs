@@ -175,15 +175,19 @@ namespace Tactile.Windows.UserInterface.Status
                     label = "HP";
                     break;
                 // Str
-                case Stat_Labels.Pow:
-                default:
-                    helpLabel = "Pow";
+                case Stat_Labels.Str:
+                    helpLabel = "Str";
                     label = "Str";
+                    break;
+                // Mag
+                case Stat_Labels.Mag:
+                    helpLabel = "Mag";
+                    label = "Mag";
                     break;
                 // Skl
                 case Stat_Labels.Skl:
-                    helpLabel = "Skl";
-                    label = "Skl";
+                    helpLabel = "Dex";
+                    label = "Dex";
                     break;
                 // Spd
                 case Stat_Labels.Spd:
@@ -209,6 +213,10 @@ namespace Tactile.Windows.UserInterface.Status
                 case Stat_Labels.Con:
                     helpLabel = "Con";
                     label = "Con";
+                    break;
+                default:
+                    helpLabel = "null";
+                    label = "null";
                     break;
             }
         }

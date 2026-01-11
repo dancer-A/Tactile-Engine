@@ -24,7 +24,7 @@ namespace TactileLibrary
             }
         }
 
-        public readonly static List<int> GENERIC_CAPS = new List<int> { 80, 20, 20, 20, 20, 20, 20 };
+        public readonly static List<int> GENERIC_CAPS = new List<int> { 80, 20, 20, 20, 20, 20, 20, 20 };
 
         public int Id;
         public string Name;
@@ -112,10 +112,10 @@ namespace TactileLibrary
             Movement_Type = MovementTypes.Light;
             Generic_Stats = new List<List<int>[]>
             {
-                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0}},
-                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0}},
-                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0}},
-                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0}}
+                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0,0}},
+                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0,0}},
+                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0,0}},
+                new List<int>[2] {new List<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},new List<int>{0,0,0,0,0,0,0,0}}
             };
         }
         public Data_Class(Data_Class data)

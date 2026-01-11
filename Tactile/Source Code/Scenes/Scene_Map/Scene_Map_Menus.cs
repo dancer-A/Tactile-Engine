@@ -29,7 +29,9 @@ namespace Tactile
         Give = 1 << 3,
         Talk = 1 << 4,
         Supply = 1 << 5,
-        Dash = 1 << 6, // Skills: Dash
+        Visit = 1 << 6,
+        Seize = 1 << 7,
+        Dash = 1 << 8, // Skills: Dash
     }
 #if DEBUG
     partial class Scene_Map : IMapMenuHandler, IUnitMenuHandler, IMapDebugMenuHandler

@@ -60,7 +60,7 @@ namespace Tactile
         {
             bool useable;
             if (item.is_weapon)
-                useable = actor.is_equippable(item as Data_Weapon);
+                useable = actor.is_equippable(item as Data_Weapon) || actor.is_secondary_equippable(item as Data_Weapon);
             else
                 useable = actor.prf_check(item) && ((item as Data_Item).Promotes.Count == 0) || Combat.can_use_item(actor, item.Id, false);
 

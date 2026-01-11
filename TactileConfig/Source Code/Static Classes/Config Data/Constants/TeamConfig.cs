@@ -17,8 +17,8 @@ namespace Tactile.Constants
         {
             { PLAYER_TEAM, "Player" },
             { ENEMY_TEAM, "Enemy" },
-            { CITIZEN_TEAM, "Citizen" },
             { INTRUDER_TEAM, "Intruder" },
+            { CITIZEN_TEAM, "Citizen" },
         };
 
         public static string team_name(int team_id)

@@ -219,7 +219,10 @@ namespace Tactile.Calculations.Stats
         #region Crt
         internal int base_crt()
         {
-            return attacker.stat(Stat_Labels.Skl) / 2;
+            if (Constants.Combat.CRIT_SKILL)
+                return attacker.stat(Stat_Labels.Skl); // fe4
+            else
+                return attacker.stat(Stat_Labels.Skl) / 2; // if not using fe4 crit mechanic
         }
 
         internal virtual int crt()
@@ -251,11 +254,17 @@ namespace Tactile.Calculations.Stats
         public bool can_crit()
         {
             Data_Weapon weapon = this.attacker_weapon;
+            var item = new Item_Data(0, attacker_weapon.Id);
             if (weapon == null)
                 return false;
 
-            if (weapon.is_staff())
+            if (weapon.is_staff() || weapon.is_secondary_equip())
                 return false;
+
+            if (Constants.Combat.CRIT_SKILL)
+                return attacker.crit_skill_check(null);
+            if (Constants.Combat.CRIT_SKILL)
+                return attacker.actor.KO_counter_Check(item);
 
             return weapon.Crt >= 0;
         }

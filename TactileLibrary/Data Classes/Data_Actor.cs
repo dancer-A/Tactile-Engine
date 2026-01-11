@@ -5,7 +5,7 @@ using ListExtension;
 
 namespace TactileLibrary
 {
-    public enum Affinities { Thunder, Dark, Anima, Earth, Fire, Water, Ice, Light, Wind, None }
+    public enum Affinities { Baldr, Od, Hodr, Njorun, Dainn, Nal, Ullr, Bragi, Fjalar, Thrud, Forseti, Naga, Loptous, None }
     public class Data_Actor
     {
         public int Id = 0;
@@ -13,8 +13,8 @@ namespace TactileLibrary
         public string Description = "";
         public int ClassId = 1;
         public int Level = 1;
-        public List<int> BaseStats = new List<int> { 20, 5, 5, 5, 5, 5, 5, 5 };
-        public List<int> Growths = new List<int> { 50, 25, 25, 25, 25, 25, 25 };
+        public List<int> BaseStats = new List<int> { 20, 5, 5, 5, 5, 5, 5, 5, 5 };
+        public List<int> Growths = new List<int> { 50, 25, 25, 25, 25, 25, 25, 25 };
         public List<int> WLvl = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public int Gender = 0;
         public Affinities Affinity = Affinities.None;

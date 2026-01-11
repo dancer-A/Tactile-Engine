@@ -46,10 +46,10 @@ namespace Tactile.Windows.Map.Info
         protected override void draw_images(Game_Unit unit)
         {
             base.draw_images(unit);
-            if (unit.is_active_player_team) //Multi
+            //if (unit.is_active_player_team) //Multi
                 Affinity_Icon.index = (int)unit.actor.affin;
-            else
-                Affinity_Icon.index = -1;
+            //else
+            //    Affinity_Icon.index = -1;
             if (unit.is_active_player_team)
             {
                 Exp_Gauge = new Unit_Info_Exp_Gauge();
@@ -66,7 +66,7 @@ namespace Tactile.Windows.Map.Info
         protected override void set_name(Game_Unit unit)
         {
             Name.text = unit.actor.name;
-            Name.offset = new Vector2(unit.is_active_player_team ? -16 : 0, 0); //Multi
+            Name.offset = new Vector2(unit.actor.affin != TactileLibrary.Affinities.None ? -16 : 0, 0); //Multi
             Inventory.set_images(unit);
             Stats.set_images(unit);
         }

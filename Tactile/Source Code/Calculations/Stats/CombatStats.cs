@@ -136,7 +136,7 @@ namespace Tactile.Calculations.Stats
                 // Weapon triangle
                 skill_dmg = 0;
                 WeaponTriangle tri = Tri(target, weapon, weapon2);
-                if (tri != WeaponTriangle.Nothing)
+                if (tri != WeaponTriangle.Nothing && magic_attack)
                     skill_dmg += Weapon_Triangle.DMG_BONUS * (tri == WeaponTriangle.Advantage ? 1 : -1) *
                         Combat.weapon_triangle_mult(attacker, target, weapon, weapon2, Distance);
 
@@ -265,20 +265,26 @@ namespace Tactile.Calculations.Stats
             bool boss_staff = false;
             int actor_hit, weapon_hit, skill_hit, support_hit, s_bonus;
             int hit_rate, target_avo;
-            if (is_staff)
+            if (is_staff) // If magic greater than target res, always hit; otherwise NEVER hit
             {
-                actor_hit = attacker.atk_pow(weapon, magic_attack) * 5 +
-                    attacker.stat(Stat_Labels.Skl);
+                if (attacker.stat(Stat_Labels.Mag) > target.stat(Stat_Labels.Res))
+                {
+                    actor_hit = 100;
+                    target_avo = 0;
+                }
+                else
+                {
+                    actor_hit = 0;
+                    target_avo = 100;
+                }
                 weapon_hit = weapon.Hit;
                 skill_hit = 0;
-                attacker.hit_skill(
-                    ref skill_hit, ref weapon_hit, ref actor_hit,
-                    weapon, target, magic_attack, Distance);
+                //attacker.hit_skill(
+                //    ref skill_hit, ref weapon_hit, ref actor_hit,
+                //    weapon, target, magic_attack, Distance);
                 support_hit = support_bonus(Combat_Stat_Labels.Hit);
                 s_bonus = 0;
                 hit_rate = Math.Max(0, actor_hit + weapon_hit + skill_hit + support_hit + s_bonus);
-
-                target_avo = this.target_stats().staff_avo();
                 boss_staff = target.boss;
             }
             else
@@ -294,7 +300,7 @@ namespace Tactile.Calculations.Stats
                 s_bonus = attacker.actor.s_rank_bonus(weapon);
                 // Weapon triangle
                 WeaponTriangle tri = Tri(target, weapon, weapon2);
-                if (tri != WeaponTriangle.Nothing)
+                if (tri != WeaponTriangle.Nothing && !magic_attack)
                     weapon_hit += Weapon_Triangle.HIT_BONUS * (tri == WeaponTriangle.Advantage ? 1 : -1) *
                         Combat.weapon_triangle_mult(attacker, target, weapon, weapon2, Distance);
 

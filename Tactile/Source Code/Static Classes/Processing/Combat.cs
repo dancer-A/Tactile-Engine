@@ -813,7 +813,10 @@ namespace Tactile
         public static int exp(Game_Unit battler_1, Game_Unit battler_2, bool kill = false)
         {
             int diff = level_difference(battler_1, battler_2);
-            return exp(diff, battler_2.boss, kill);
+            int expgain = exp(diff, battler_2.boss, kill);
+            if (battler_1.actor.has_skill("PARAGON"))
+                expgain = Math.Min(expgain * 2, Global.ActorConfig.ExpToLvl);
+            return expgain;
         }
 
         public static int exp(int diff, bool boss = false, bool kill = false)
@@ -1096,7 +1099,9 @@ namespace Tactile
             {
                 if (item.Stat_Boost[(int)Boosts.MaxHp] > 0 && !actor.get_capped(Stat_Labels.Hp))
                     return true;
-                if (item.Stat_Boost[(int)Boosts.Pow] > 0 && !actor.get_capped(Stat_Labels.Pow))
+                if (item.Stat_Boost[(int)Boosts.Str] > 0 && !actor.get_capped(Stat_Labels.Str))
+                    return true;
+                if (item.Stat_Boost[(int)Boosts.Mag] > 0 && !actor.get_capped(Stat_Labels.Mag))
                     return true;
                 if (item.Stat_Boost[(int)Boosts.Skl] > 0 && !actor.get_capped(Stat_Labels.Skl))
                     return true;

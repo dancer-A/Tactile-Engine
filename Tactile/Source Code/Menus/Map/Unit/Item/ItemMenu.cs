@@ -45,7 +45,7 @@ namespace Tactile.Menus.Map.Unit.Item
             get
             {
                 var itemWindow = Window as Window_Command_Item;
-                return itemWindow.equipped - 1 == this.SelectedItem;
+                return (itemWindow.equipped - 1 == this.SelectedItem) || (itemWindow.secondary_equipped - 1 == this.SelectedItem);
             }
         }
 

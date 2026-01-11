@@ -15,6 +15,7 @@ namespace Tactile.Windows.Command.Items
         protected int Unit_Id = -1;
         protected int Actor_Id = -1;
         int Equipped = 0;
+        int Secondary_Equipped = 0;
         protected List<int> Index_Redirect = new List<int>();
         protected int[] Stat_Values = new int[4];
 
@@ -37,6 +38,7 @@ namespace Tactile.Windows.Command.Items
         }
 
         public int equipped { get { return Equipped; } }
+        public int secondary_equipped { get { return Secondary_Equipped; } }
 
         public Game_Unit unit { get { return (Unit_Id == -1 ? null : Global.game_map.units[Unit_Id]); } }
 
@@ -264,8 +266,10 @@ namespace Tactile.Windows.Command.Items
                 {
                     if (unit == null)
                         actor().equip(redirect() + 1);
-                    else
+                    else if (actor().is_equippable(current_item_data.to_weapon))
                         unit.equip(redirect() + 1);
+                    else if (actor().is_secondary_equippable(current_item_data.to_weapon))
+                        unit.equip_secondary(redirect() + 1);
                 }
                 // On items, equip the weapon the actor is actually using
                 // For example, so that arms scroll knows what its boosting
@@ -364,12 +368,13 @@ namespace Tactile.Windows.Command.Items
         public void refresh_equipped_tag()
         {
             Equipped = actor().equipped;
+            Secondary_Equipped = actor().secondary_equipped;
             if (show_equipped() && base.Items != null)
             {
                 for (int i = 0; i < base.Items.Count; i++) //Debug
                 {
                     (base.Items[i] as ItemUINode).equip(
-                        Index_Redirect[i] == Equipped - 1); //Debug
+                        (Index_Redirect[i] == Equipped - 1) || (Index_Redirect[i] == Secondary_Equipped - 1)); //Debug
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace Tactile
     {
         const int SKIP_WAIT_TIME = 60;
         static Vector2 LOC = new Vector2(8, 80);
-        const int COLUMN_HEIGHT = 4;
+        const int COLUMN_HEIGHT = 5;
 
         protected int Actor_Id;
         protected bool Execute = false;
@@ -94,40 +94,39 @@ namespace Tactile
             Level.SetFont(Config.UI_FONT, Global.Content, "Blue");
             Level.offset = new Vector2(-(104), 8);
             // Stat Labels
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Stat_Labels.Add(new TextSprite());
                 Stat_Labels[i].SetFont(Config.UI_FONT, Global.Content, "StatHueWhite");
                 Stat_Labels[i].offset += new Vector2(
                     -(0 + (i / COLUMN_HEIGHT) * 64),
-                    -((i % COLUMN_HEIGHT) * 16));
+                    -((i % COLUMN_HEIGHT) * 14));
                 Stat_Labels[i].tint = Game_Actor.StatLabelBaseTint;
             }
             Stat_Labels[0].text = "HP";
             Stat_Labels[0].offset += new Vector2(-2, 0);
-            if (actor.power_type() == Power_Types.Strength)
-                Stat_Labels[1].text = "Str";
-            if (actor.power_type() == Power_Types.Magic)
-                Stat_Labels[1].text = "Mag";
-            if (actor.power_type() == Power_Types.Power)
-                Stat_Labels[1].text = "Pow";
+            Stat_Labels[1].text = "Str";
             Stat_Labels[1].offset += new Vector2(-1, 0);
-            Stat_Labels[2].text = "Skill";
-            Stat_Labels[2].offset += new Vector2(1, 0);
-            Stat_Labels[3].text = "Spd";
-            Stat_Labels[4].text = "Luck";
-            Stat_Labels[4].offset += new Vector2(2, 0);
-            Stat_Labels[5].text = "Def";
-            Stat_Labels[6].text = "Res";
-            Stat_Labels[7].text = "Con";
+            Stat_Labels[2].text = "Mag";
+            Stat_Labels[2].offset += new Vector2(0, 0);
+            Stat_Labels[3].text = "Dex";
+            Stat_Labels[3].offset += new Vector2(-1, 0);
+            Stat_Labels[4].text = "Spd";
+            Stat_Labels[5].text = "Lck";
+            Stat_Labels[5].offset += new Vector2(1, 0);
+            Stat_Labels[6].text = "Def";
+            Stat_Labels[7].text = "Res";
+            Stat_Labels[8].text = "Bld";
+            Stat_Labels[9].text = "Mov";
+            Stat_Labels[9].offset += new Vector2(-1, 0);
             // Stats
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Stats.Add(new RightAdjustedText());
                 Stats[i].SetFont(Config.UI_FONT, Global.Content, "Blue");
                 Stats[i].offset += new Vector2(
                     -(48 + (i / COLUMN_HEIGHT) * 64),
-                    -((i % COLUMN_HEIGHT) * 16));
+                    -((i % COLUMN_HEIGHT) * 14));
             }
             // Face
             Face_Img = new Face_Sprite(actor.face_name, true);
@@ -179,7 +178,7 @@ namespace Tactile
         {
             set_class_name();
             Level.text = actor.level.ToString();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Stats[i].text = stat_value(i).ToString();
                 Stats[i].SetColor(Global.Content, actor.get_capped(i) ? "Green" : "Blue");

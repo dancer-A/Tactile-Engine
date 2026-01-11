@@ -27,6 +27,7 @@ namespace Tactile
 
             { 101, 3 }, // Fire
             { 103, 3 }, // Arcfire
+            { 105, 3 }, // Valflame
             { 111, 3 }, // Thunder
             { 112, 3 }, // Elthunder
             { 113, 3 }, // Arcthunder

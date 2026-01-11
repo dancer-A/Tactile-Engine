@@ -18,7 +18,7 @@
 
         public const int CONVOY_SIZE = 150;
         public const Convoy_Stack_Types CONVOY_ITEMS_STACK = Convoy_Stack_Types.Use;
-        public const bool CONVOY_SOLD_ITEMS_REPAIR = true; // Do items sold to the convoy show up again repaired in the next chapter
+        public const bool CONVOY_SOLD_ITEMS_REPAIR = false; // Do items sold to the convoy show up again repaired in the next chapter
         public const bool TEAM_LEADER_CONVOY = false; // Can team leaders always access the convoy
 
         public const bool SIEGE_RELOADING = true; // Siege engines are disabled for a turn after firing

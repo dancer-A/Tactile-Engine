@@ -112,16 +112,134 @@ namespace Tactile
                         if (double.TryParse(name.substring(4, name.Length - 4), out str_test))
                             n += Convert.ToInt32(name.Substring(4, name.Length - 4));
                     }
+                    #region Holy Blood
+                    // Baldr
+                    if (affin == Affinities.Baldr)
+                        n += 20;
+                    if (has_skill("BALDR")) // minor gets half
+                        n += 10;
+
+                    // Njorun
+                    if (affin == Affinities.Njorun)
+                        n += 20;
+                    if (has_skill("NJORUN")) // minor gets half
+                        n += 10;
+
+                    // Dainn
+                    if (affin == Affinities.Dainn)
+                        n += 20;
+                    if (has_skill("DAINN")) // minor gets half
+                        n += 10;
+
+                    // Nal
+                    if (affin == Affinities.Nal)
+                        n += 20;
+                    if (has_skill("NAL")) // minor gets half
+                        n += 10;
+
+                    // Naga
+                    if (affin == Affinities.Naga)
+                        n += 20;
+                    if (has_skill("NAGA")) // minor gets half
+                        n += 10;
+
+                    // Loptous
+                    if (affin == Affinities.Loptous)
+                        n += 20;
+                    if (has_skill("LOPTOUS")) // minor gets half
+                        n += 10;
+                    #endregion
+
                     break;
-                case Stat_Labels.Pow:
-                    // Skills: Pow%+
-                    foreach (int skill_id in growth_skills.Where(x => Global.data_skills[x].Abstract.substring(0, 5) == "POW%+"))
+                case Stat_Labels.Str:
+                    // Skills: Str%+
+                    foreach (int skill_id in growth_skills.Where(x => Global.data_skills[x].Abstract.substring(0, 5) == "Str%+"))
                     {
                         double str_test;
                         string name = Global.data_skills[skill_id].Abstract;
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Baldr
+                    if (affin == Affinities.Baldr)
+                        n += 10;
+                    if (has_skill("BALDR")) // minor gets half
+                        n += 5;
+
+                    // Hodr
+                    if (affin == Affinities.Hodr)
+                        n += 20;
+                    if (has_skill("HODR")) // minor gets half
+                        n += 10;
+
+                    // Njorun
+                    if (affin == Affinities.Njorun)
+                        n += 10;
+                    if (has_skill("NJORUN")) // minor gets half
+                        n += 5;
+
+                    // Nal
+                    if (affin == Affinities.Nal)
+                        n += 10;
+                    if (has_skill("NAL")) // minor gets half
+                        n += 5;
+
+                    // Thrud
+                    if (affin == Affinities.Thrud)
+                        n += 10;
+                    if (has_skill("THRUD")) // minor gets half
+                        n += 5;
+                    #endregion
+
+                    break;
+                case Stat_Labels.Mag:
+                    // Skills: Str%+
+                    foreach (int skill_id in growth_skills.Where(x => Global.data_skills[x].Abstract.substring(0, 5) == "Mag%+"))
+                    {
+                        double str_test;
+                        string name = Global.data_skills[skill_id].Abstract;
+                        if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
+                            n += Convert.ToInt32(name.Substring(5, name.Length - 5));
+                    }
+                    #region Holy Blood
+                    // Ullr
+                    if (affin == Affinities.Ullr)
+                        n += 10;
+                    if (has_skill("ULLR")) // minor gets half
+                        n += 5;
+
+                    // Bragi
+                    if (affin == Affinities.Bragi)
+                        n += 10;
+                    if (has_skill("BRAGI")) // minor gets half
+                        n += 5;
+
+                    // Fjalar
+                    if (affin == Affinities.Fjalar)
+                        n += 20;
+                    if (has_skill("FJALAR")) // minor gets half
+                        n += 10;
+
+                    // Forseti
+                    if (affin == Affinities.Forseti)
+                        n += 10;
+                    if (has_skill("FORSETI")) // minor gets half
+                        n += 5;
+
+                    // Naga
+                    if (affin == Affinities.Naga)
+                        n += 20;
+                    if (has_skill("NAGA")) // minor gets half
+                        n += 10;
+
+                    // Loptous
+                    if (affin == Affinities.Loptous)
+                        n += 20;
+                    if (has_skill("LOPTOUS")) // minor gets half
+                        n += 10;
+                    #endregion
+
                     break;
                 case Stat_Labels.Skl:
                     // Skills: Skl%+
@@ -132,6 +250,37 @@ namespace Tactile
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Baldr
+                    if (affin == Affinities.Baldr)
+                        n += 10;
+                    if (has_skill("BALDR")) // minor gets half
+                        n += 5;
+
+                    // Od
+                    if (affin == Affinities.Od)
+                        n += 20;
+                    if (has_skill("OD")) // minor gets half
+                        n += 10;
+
+                    // Hodr
+                    if (affin == Affinities.Hodr)
+                        n += 10;
+                    if (has_skill("HODR")) // minor gets half
+                        n += 5;
+
+                    // Dainn
+                    if (affin == Affinities.Dainn)
+                        n += 10;
+                    if (has_skill("DAINN")) // minor gets half
+                        n += 5;
+
+                    // Thrud
+                    if (affin == Affinities.Thrud)
+                        n += 10;
+                    if (has_skill("THRUD")) // minor gets half
+                        n += 5;
+                    #endregion
                     break;
                 case Stat_Labels.Spd:
                     // Skills: Spd%+
@@ -142,6 +291,38 @@ namespace Tactile
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Od
+                    if (affin == Affinities.Od)
+                        n += 10;
+                    if (has_skill("OD")) // minor gets half
+                        n += 5;
+
+                    // Njorun
+                    if (affin == Affinities.Njorun)
+                        n += 10;
+                    if (has_skill("NJORUN")) // minor gets half
+                        n += 5;
+
+                    // Dainn
+                    if (affin == Affinities.Dainn)
+                        n += 20;
+                    if (has_skill("DAINN")) // minor gets half
+                        n += 10;
+
+                    // Thrud
+                    if (affin == Affinities.Thrud)
+                        n += 10;
+                    if (has_skill("THRUD")) // minor gets half
+                        n += 5;
+
+                    // Forseti
+                    if (affin == Affinities.Forseti)
+                        n += 20;
+                    if (has_skill("FORSETI")) // minor gets half
+                        n += 10;
+
+                    #endregion
                     break;
                 case Stat_Labels.Lck:
                     // Skills: Lck%+
@@ -152,6 +333,44 @@ namespace Tactile
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Baldr
+                    if (affin == Affinities.Baldr)
+                        n += 10;
+                    if (has_skill("BALDR")) // minor gets half
+                        n += 5;
+
+                    // Ullr
+                    if (affin == Affinities.Ullr)
+                        n += 20;
+                    if (has_skill("ULLR")) // minor gets half
+                        n += 10;
+
+                    // Bragi
+                    if (affin == Affinities.Bragi)
+                        n += 10;
+                    if (has_skill("BRAGI")) // minor gets half
+                        n += 5;
+
+                    // Fjalar
+                    if (affin == Affinities.Fjalar)
+                        n += 10;
+                    if (has_skill("FJALAR")) // minor gets half
+                        n += 5;
+
+                    // Forseti
+                    if (affin == Affinities.Forseti)
+                        n += 10;
+                    if (has_skill("FORSETI")) // minor gets half
+                        n += 5;
+
+                    // Naga
+                    if (affin == Affinities.Naga)
+                        n += 10;
+                    if (has_skill("NAGA")) // minor gets half
+                        n += 5;
+
+                    #endregion
                     break;
                 case Stat_Labels.Def:
                     // Skills: Def%+
@@ -162,6 +381,38 @@ namespace Tactile
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Hodr
+                    if (affin == Affinities.Hodr)
+                        n += 10;
+                    if (has_skill("HODR")) // minor gets half
+                        n += 5;
+
+                    // Njorun
+                    if (affin == Affinities.Njorun)
+                        n += 10;
+                    if (has_skill("NJORUN")) // minor gets half
+                        n += 5;
+
+                    // Nal
+                    if (affin == Affinities.Nal)
+                        n += 20;
+                    if (has_skill("NAL")) // minor gets half
+                        n += 10;
+
+                    // Thrud
+                    if (affin == Affinities.Thrud)
+                        n += 10;
+                    if (has_skill("THRUD")) // minor gets half
+                        n += 5;
+
+                    // Loptous
+                    if (affin == Affinities.Loptous)
+                        n += 10;
+                    if (has_skill("LOPTOUS")) // minor gets half
+                        n += 5;
+
+                    #endregion
                     break;
                 case Stat_Labels.Res:
                     // Skills: Res%+
@@ -172,6 +423,43 @@ namespace Tactile
                         if (double.TryParse(name.substring(5, name.Length - 5), out str_test))
                             n += Convert.ToInt32(name.Substring(5, name.Length - 5));
                     }
+                    #region Holy Blood
+                    // Od
+                    if (affin == Affinities.Od)
+                        n += 10;
+                    if (has_skill("OD")) // minor gets half
+                        n += 5;
+
+                    // Ullr
+                    if (affin == Affinities.Ullr)
+                        n += 10;
+                    if (has_skill("ULLR")) // minor gets half
+                        n += 5;
+
+                    // Bragi
+                    if (affin == Affinities.Bragi)
+                        n += 20;
+                    if (has_skill("BRAGI")) // minor gets half
+                        n += 10;
+
+                    // Fjalar
+                    if (affin == Affinities.Fjalar)
+                        n += 10;
+                    if (has_skill("FJALAR")) // minor gets half
+                        n += 5;
+
+                    // Naga
+                    if (affin == Affinities.Naga)
+                        n += 10;
+                    if (has_skill("NAGA")) // minor gets half
+                        n += 5;
+
+                    // Loptous
+                    if (affin == Affinities.Loptous)
+                        n += 10;
+                    if (has_skill("LOPTOUS")) // minor gets half
+                        n += 5;
+                    #endregion
                     break;
             }
             // Skills: Affinity+
@@ -360,6 +648,8 @@ namespace Tactile
             // Skills: Academic
             else if (has_skill("ACADEMIC"))
                 wexp *= 2;
+            else
+                wexp = 0; // fe4
         }
 
         protected int min_weapon_exp_skill(WeaponType type, int wexp)
@@ -406,9 +696,72 @@ namespace Tactile
 
         protected int max_weapon_level_override(WeaponType type, int rank)
         {
+            // Leadership Rank
+            if (type.Name == "Leadership")
+                rank = 6;
             // Skills: Peerless
             if (has_skill("PEERLESS"))
                 rank = Math.Max(rank, actor_class.Max_WLvl[type.Key - 1]);
+            if (affin == Affinities.Baldr || affin == Affinities.Od || affin == Affinities.Hodr)
+                if (type.Name == "Sword" && rank > 0)
+                    rank = 6;
+            if (has_skill("BALDR") || has_skill("OD") || has_skill ("HODR"))
+                if (type.Name == "Sword" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Njorun || affin == Affinities.Dainn)
+                if (type.Name == "Lance" && rank > 0)
+                    rank = 6;
+            if (has_skill("NJORUN") || has_skill("DAINN"))
+                if (type.Name == "Lance" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Nal)
+                if (type.Name == "Axe" && rank > 0)
+                    rank = 6;
+            if (has_skill("NAL"))
+                if (type.Name == "Axe" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Ullr)
+                if (type.Name == "Bow" && rank > 0)
+                    rank = 6;
+            if (has_skill("ULLR"))
+                if (type.Name == "Bow" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Bragi)
+                if (type.Name == "Staff" && rank > 0)
+                    rank = 6;
+            if (has_skill("BRAGI"))
+                if (type.Name == "Staff" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Fjalar)
+                if (type.Name == "Fire" && rank > 0)
+                    rank = 6;
+            if (has_skill("FJALAR"))
+                if (type.Name == "Fire" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Thrud)
+                if (type.Name == "Thunder" && rank > 0)
+                    rank = 6;
+            if (has_skill("THRUD"))
+                if (type.Name == "Thunder" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Forseti)
+                if (type.Name == "Wind" && rank > 0)
+                    rank = 6;
+            if (has_skill("FORSETI"))
+                if (type.Name == "Wind" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Naga)
+                if (type.Name == "Light" && rank > 0)
+                    rank = 6;
+            if (has_skill("NAGA"))
+                if (type.Name == "Light" && rank > 0 && rank < 5)
+                    rank++;
+            if (affin == Affinities.Loptous)
+                if (type.Name == "Dark" && rank > 0)
+                    rank = 6;
+            if (has_skill("LOPTOUS"))
+                if (type.Name == "Dark" && rank > 0 && rank < 5)
+                    rank++;
             return rank;
         }
         #endregion
@@ -422,6 +775,64 @@ namespace Tactile
             if (has_skill("DANCE"))
                 return true;
             return false;
+        }
+
+        internal bool KO_counter_Check(Item_Data item)
+        {
+            if (item.Kills >= 50)
+                return true;
+            return false;
+        }
+
+        private bool dismount_skill()
+        {
+            if (class_types.Contains(ClassTypes.Cavalry))
+                return true;
+            if (class_types.Contains(ClassTypes.Flier))
+            {
+                // don't allow if the terrain is not passable by infantry & heavy
+                return true;
+            }
+            return false;
+        }
+
+        private bool remount_skill()
+        {
+            if (class_types.Contains(ClassTypes.Cavalry))
+                return true;
+            if (class_types.Contains(ClassTypes.Flier))
+            {
+                // don't allow if the terrain is not passable by infantry & heavy
+                return true;
+            }
+            return false;
+        }
+
+        // Dismount
+        public void dismount_unit()
+        {
+            this.Dismounted = true;
+            this.Mounted = false;
+            this.add_state(21);
+            /// Real function of the example skill goes here. If you want to attach some
+            /// kind of animation to the skill, take a look at how sacrifice does that
+            /// through (Game_Sacrifice_State). Basically, it's a component of the Game_State
+            /// class that is responsible for handling how sacrifice proceeds when called.
+
+            //wait(true); // Something has to tell the unit to wait, otherwise... well, you can comment this line out and see for yourself
+        }
+
+        public void mount_unit()
+        {
+            this.Dismounted = false;
+            this.Mounted = true;
+            this.remove_state(21);
+            /// Real function of the example skill goes here. If you want to attach some
+            /// kind of animation to the skill, take a look at how sacrifice does that
+            /// through (Game_Sacrifice_State). Basically, it's a component of the Game_State
+            /// class that is responsible for handling how sacrifice proceeds when called.
+
+            //wait(true); // Something has to tell the unit to wait, otherwise... well, you can comment this line out and see for yourself
         }
 
         public bool can_construct_skill()

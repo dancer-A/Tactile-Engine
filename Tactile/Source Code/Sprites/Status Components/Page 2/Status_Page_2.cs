@@ -13,12 +13,12 @@ namespace Tactile
 {
     class Status_Page_2 : Status_Page
     {
-        const int ACTOR_SKILLS = 4;
+        const int ACTOR_SKILLS = 5;
         const int ITEM_SKILLS = 8;
         const int WLVL_COLUMNS = 2;
 
         protected System_Color_Window Skills_Window, WLvls_Window;
-        private Status_Support_Background Skill_Bg;
+        private Status_Support_Background Skill_Bg, Lead_Bg;
 
         private List<StatusUINode> TemporaryWLvls = new List<StatusUINode>();
 
@@ -28,9 +28,9 @@ namespace Tactile
 
             // Skills Window
             Skills_Window = new System_Color_Window();
-            Skills_Window.loc = new Vector2(8, 96);
+            Skills_Window.loc = new Vector2(8, 80);
             Skills_Window.width = 144;
-            Skills_Window.height = 96;
+            Skills_Window.height = 112;
             Skills_Window.stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
 
             // WLvls Window
@@ -46,18 +46,30 @@ namespace Tactile
             int wlvl_rows = (max_wlvl_index / WLVL_COLUMNS) + 1;
 
             WLvls_Window = new System_Color_Window();
-            WLvls_Window.loc = new Vector2(168, 96);
+            WLvls_Window.loc = new Vector2(168, 80);
             WLvls_Window.width = 144;
-            WLvls_Window.height = (wlvl_rows + 1) * 16; // 96; //Debug
+            WLvls_Window.height = (wlvl_rows + 2) * 16; // 96; //Debug
             WLvls_Window.stereoscopic = Config.STATUS_RIGHT_WINDOW_DEPTH;
 
             // Skill Bg
             Skill_Bg = new Status_Support_Background();
             Skill_Bg.loc = Skills_Window.loc + new Vector2(8, 8 + ACTOR_SKILLS * 16);
             Skill_Bg.stereoscopic = Config.STATUS_RIGHT_WINDOW_DEPTH;
-            
+
+            // Leadership Bg
+            Lead_Bg = new Status_Support_Background();
+            Lead_Bg.loc = WLvls_Window.loc + new Vector2(8, 24);
+            Lead_Bg.stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
+
+            // Leadership Stars
+            nodes.Add(new StatusLeadershipUINode(
+            "Leadership",
+            (Game_Unit unit) => unit.actor.get_weapon_level(Global.weapon_types[11])));
+            nodes.Last().loc = WLvls_Window.loc + new Vector2(8, 8);
+            nodes.Last().stereoscopic = Config.STATUS_LEFT_WINDOW_DEPTH;
+
             // Skills
-            for(int i = 0; i < ACTOR_SKILLS; i++)
+            for (int i = 0; i < ACTOR_SKILLS; i++)
             {
                 int j = i;
 
@@ -117,7 +129,7 @@ namespace Tactile
 
                 Vector2 loc = Skills_Window.loc +
                     new Vector2(8 + (Config.SKILL_ICON_SIZE - 16) / 2 +
-                        i * Config.SKILL_ICON_SIZE, 72 + 2);
+                        i * Config.SKILL_ICON_SIZE, 88 + 2);
 
                 nodes.Add(new StatusSkillIconUINode(
                     string.Format("Item Skill{0}", i + 1),
@@ -159,7 +171,7 @@ namespace Tactile
         {
             Vector2 loc = WLvls_Window.loc + new Vector2(
                 (statusIndex % WLVL_COLUMNS) * 64 + 8,
-                (statusIndex / WLVL_COLUMNS) * 16 + 8);
+                (statusIndex / WLVL_COLUMNS) * 16 + 24);
 
             var node = new StatusWLvlUINode(
                 weapon_type.StatusHelpName,
@@ -251,6 +263,7 @@ namespace Tactile
             // WLvls Window
             WLvls_Window.draw(sprite_batch, draw_offset);
             Skill_Bg.draw(sprite_batch, draw_offset);
+            Lead_Bg.draw(sprite_batch, draw_offset);
 
             foreach (var node in StatusPageNodes
                     .Where(x => x is StatusWLvlUINode))

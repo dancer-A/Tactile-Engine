@@ -38,56 +38,72 @@ namespace Tactile.Constants
         public readonly static Dictionary<Affinities, float[]> AFFINITY_BOOSTS = new Dictionary<Affinities, float[]>
         {
             //                                   Atk,  Def,  Hit,  Avo, Crit,  Dod
-            { Affinities.Thunder, new float[] { 0.5f, 0.5f, 2.5f,   0f, 2.5f,   0f } }, // 3Off, 1Def
-            { Affinities.Dark,    new float[] { 0.5f, 0.5f,   0f, 2.5f,   0f, 2.5f } }, // 1Off, 3Def
-            { Affinities.Anima,   new float[] { 0.5f, 0.5f, 2.5f, 2.5f,   0f,   0f } }, // 2Off, 2Def
-            { Affinities.Earth,   new float[] { 0.5f, 0.5f,   0f,   0f, 2.5f, 2.5f } }, // 2Off, 2Def
-            { Affinities.Fire,    new float[] { 0.5f,   0f, 2.5f, 2.5f,   0f, 2.5f } }, // 2Off, 2Def
-            { Affinities.Water,   new float[] { 0.5f,   0f,   0f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
-            { Affinities.Ice,     new float[] {   0f, 0.5f, 2.5f, 2.5f, 2.5f,   0f } }, // 2Off, 2Def
-            { Affinities.Light,   new float[] {   0f, 0.5f, 2.5f,   0f, 2.5f, 2.5f } }, // 2Off, 2Def
-            { Affinities.Wind,    new float[] {   0f,   0f, 2.5f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Baldr,     new float[] {   0f, 0.5f,   0f, 2.5f,   0f,   0f } }, // 3Off, 1Def
+            { Affinities.Od,        new float[] {   0f,   0f,   0f, 2.5f, 2.5f,   0f } }, // 1Off, 3Def
+            { Affinities.Hodr,      new float[] { 0.5f,   0f,   0f,   0f, 2.5f,   0f } }, // 2Off, 2Def
+            { Affinities.Njorun,    new float[] { 0.5f, 0.5f,   0f,   0f,   0f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Dainn,     new float[] {   0f,   0f, 2.5f, 2.5f,   0f,   0f } }, // 2Off, 2Def
+            { Affinities.Nal,       new float[] {   0f, 0.5f,   0f,   0f,   0f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Ullr,      new float[] {   0f,   0f, 2.5f,   0f, 2.5f,   0f } }, // 2Off, 2Def
+            { Affinities.Bragi,     new float[] { 0.5f,   0f,   0f,   0f,   0f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Fjalar,    new float[] { 0.5f,   0f, 2.5f,   0f,   0f,   0f } }, // 2Off, 2Def
+            { Affinities.Thrud,     new float[] {   0f, 0.5f,   0f,   0f, 2.5f,   0f } }, // 2Off, 2Def
+            { Affinities.Forseti,   new float[] {   0f,   0f,   0f, 2.5f,   0f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Naga,      new float[] { 0.5f, 0.5f, 2.5f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
+            { Affinities.Loptous,   new float[] { 0.5f, 0.5f, 2.5f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
             
-            { Affinities.None,    new float[] { 0,0,0,0,0,0 } },
+            { Affinities.None,      new float[] {   0f,   0f, 2.5f,   0f,   0f, 2.5f } }
         };
         // The support bonus for a bond, default is one support rank worth of every stat
         public readonly static float[] BOND_BOOSTS = new float[] { 1f, 1f, 5f, 5f, 5f, 5f };
 
         // Growth rate change to apply to generics
-        public const int AFFINITY_GROWTH_MOD = 5;
+        public const int AFFINITY_GROWTH_MOD = 10;
         // Stats that each affinity affects
         // The first list in each entry is boosted by that affinity,
         //     the second group is reduced
         public readonly static Dictionary<Affinities, List<Stat_Labels>[]> AFFINITY_GROWTHS =
             new Dictionary<Affinities, List<Stat_Labels>[]>
         {
-            { Affinities.Thunder, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Skl },
-                new List<Stat_Labels> { Stat_Labels.Spd, Stat_Labels.Lck } } },
-            { Affinities.Dark, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Lck, Stat_Labels.Def },
-                new List<Stat_Labels> { Stat_Labels.Skl, Stat_Labels.Spd } } },
-            { Affinities.Anima, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Res },
-                new List<Stat_Labels> { Stat_Labels.Lck, Stat_Labels.Def } } },
-            { Affinities.Earth, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Skl, Stat_Labels.Def },
-                new List<Stat_Labels> { Stat_Labels.Spd, Stat_Labels.Res } } },
-            { Affinities.Fire, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Lck },
-                new List<Stat_Labels> { Stat_Labels.Skl, Stat_Labels.Def } } },
-            { Affinities.Water, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Spd, Stat_Labels.Lck },
-                new List<Stat_Labels> { Stat_Labels.Def, Stat_Labels.Res } } },
-            { Affinities.Ice, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Spd, Stat_Labels.Res },
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Lck } } },
-            { Affinities.Light, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Def, Stat_Labels.Res },
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Skl } } },
-            { Affinities.Wind, new List<Stat_Labels>[] {
-                new List<Stat_Labels> { Stat_Labels.Skl, Stat_Labels.Spd },
-                new List<Stat_Labels> { Stat_Labels.Pow, Stat_Labels.Res } } }
+            { Affinities.Baldr, new List<Stat_Labels>[] { // HP +20%, Str +10%, Dex +10%, Luck +10%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Str, Stat_Labels.Skl, Stat_Labels.Lck },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Od, new List<Stat_Labels>[] { // HP +20% Dex +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Skl, Stat_Labels.Skl, Stat_Labels.Skl },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Hodr, new List<Stat_Labels>[] { // HP +20%, Str +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Str, Stat_Labels.Str, Stat_Labels.Str },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Njorun, new List<Stat_Labels>[] { // HP +20%, Str +10%, Spd +10%, Def +10%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Str, Stat_Labels.Spd, Stat_Labels.Def },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Dainn, new List<Stat_Labels>[] { // HP +20%, Spd +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Skl, Stat_Labels.Skl, Stat_Labels.Skl },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Nal, new List<Stat_Labels>[] { // HP +20%, Def +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Def, Stat_Labels.Def, Stat_Labels.Def },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Ullr, new List<Stat_Labels>[] { // HP +20%, Lck +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Lck, Stat_Labels.Lck, Stat_Labels.Lck },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Bragi, new List<Stat_Labels>[] { // HP +10%, Mag +10%, Luck +10%, Res +20%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Mag, Stat_Labels.Lck, Stat_Labels.Res, Stat_Labels.Res },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Fjalar, new List<Stat_Labels>[] { // HP +20%, Mag +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Mag, Stat_Labels.Mag, Stat_Labels.Mag },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Thrud, new List<Stat_Labels>[] { // HP +20%, Dex +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Skl, Stat_Labels.Skl, Stat_Labels.Skl },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Forseti, new List<Stat_Labels>[] { // HP +20%, Spd +30%
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Hp, Stat_Labels.Spd, Stat_Labels.Spd, Stat_Labels.Spd },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Naga, new List<Stat_Labels>[] { // HP +10%, Mag +20%, Res +20
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Mag, Stat_Labels.Mag, Stat_Labels.Res, Stat_Labels.Res },
+                new List<Stat_Labels> {  } } },
+            { Affinities.Loptous, new List<Stat_Labels>[] { // HP +10%, Mag +20%, Res +20
+                new List<Stat_Labels> { Stat_Labels.Hp, Stat_Labels.Mag, Stat_Labels.Mag, Stat_Labels.Res, Stat_Labels.Res },
+                new List<Stat_Labels> {  } } }
         };
 
         /// <summary>

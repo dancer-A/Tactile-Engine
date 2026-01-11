@@ -34,6 +34,12 @@ namespace Tactile.Menus.Map.Unit
             // Skills: Sacrifice
             TargetCommands.Add(UnitCommandMenu.SkillCommandId(SkillMenuIds.Sacrifice),
                 (Game_Unit unit, UnitCommandMenu menu) => Sacrifice(unit, menu));
+            // Dismount
+            TargetCommands.Add(UnitCommandMenu.SkillCommandId(SkillMenuIds.Dismount),
+             (Game_Unit unit, UnitCommandMenu menu) => Dismount(unit, menu));
+            // Mount
+            TargetCommands.Add(UnitCommandMenu.SkillCommandId(SkillMenuIds.Mount),
+             (Game_Unit unit, UnitCommandMenu menu) => Mount(unit, menu));
             // Skills: Old Swoop //@Debug
             SimpleCommands.Add(UnitCommandMenu.SkillCommandId(SkillMenuIds.OldSwoop),
                 (Game_Unit unit) => OldSwoop(unit));
@@ -181,6 +187,43 @@ namespace Tactile.Menus.Map.Unit
 
             Game_Unit unit = Global.game_map.units[targetMenu.UnitId];
             MenuHandler.UnitMenuSacrifice(unit, targetMenu.SelectedUnitId);
+        }
+        #endregion
+        #region Dismount
+        private void Dismount(Game_Unit unit, UnitCommandMenu unitMenu) // dismount skill
+        {
+            /// This section handles any menuing that needs to happen after pressing
+            /// the command skill. In this case, we just close the play the "confirm"
+            /// sound and close the menus, before calling the function that has the real
+            /// function of the skill. In other cases, you may imagine needing to open a
+            /// submenu in this section. For example, sacrifice opens a targeting menu
+            /// that allows the player to specify a target, or maybe your skill allows 
+            /// you to choose an effect from a series of options.
+
+            Global.game_system.play_se(System_Sounds.Confirm);
+
+            Global.game_temp.menuing = false;
+            CloseCommandMenu(true);
+
+            unit.dismount_unit();
+        }
+
+        private void Mount(Game_Unit unit, UnitCommandMenu unitMenu) // remount skill
+        {
+            /// This section handles any menuing that needs to happen after pressing
+            /// the command skill. In this case, we just close the play the "confirm"
+            /// sound and close the menus, before calling the function that has the real
+            /// function of the skill. In other cases, you may imagine needing to open a
+            /// submenu in this section. For example, sacrifice opens a targeting menu
+            /// that allows the player to specify a target, or maybe your skill allows 
+            /// you to choose an effect from a series of options.
+
+            Global.game_system.play_se(System_Sounds.Confirm);
+
+            Global.game_temp.menuing = false;
+            CloseCommandMenu(true);
+
+            unit.mount_unit();
         }
         #endregion
 

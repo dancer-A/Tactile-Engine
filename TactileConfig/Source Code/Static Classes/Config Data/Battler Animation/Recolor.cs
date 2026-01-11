@@ -458,8 +458,7 @@ namespace Tactile
 
         public readonly static Dictionary<string, string> SPRITE_RENAME_LIST = new Dictionary<string, string>
         {
-            { "Alec", "Member" },
-            { "Stephen", "Member" },
+            { "Diluglio", "Verdane" },
             
             { "Etruria_Hemda", "Etruria" },
             { "Merc_Bern", "Bern" },

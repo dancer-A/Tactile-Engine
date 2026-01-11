@@ -67,7 +67,7 @@ namespace Tactile
             // Bond
             nodes.Add(new StatusLabeledTextUINode(
                 "Bond",
-                "Bond",
+                "Lover",
                 (Game_Unit unit) =>
                 {
                     if (unit.actor.bond > 0)

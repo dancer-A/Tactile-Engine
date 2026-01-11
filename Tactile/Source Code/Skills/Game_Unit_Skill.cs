@@ -80,13 +80,29 @@ namespace Tactile
             }
         }
 
+        #region Start Attack Bools
+        //bool Combat_Art = false;
+        bool Charge_Active = false;
+        bool Wary_Fighter_Active = false;
+        bool Battle_Begin = false;
+        #endregion
+
         private void start_attack_skills(int attackIndex, Combat_Map_Object target)
         {
+            if (attackIndex == -1)
+            {
+                Battle_Begin = true;
+                // Skills: Charge
+            }
         }
 
         private void end_battle_skills()
         {
             // Overwritten by Vendetta and Swoop //Yeti
+            Battle_Begin = false;
+            // Skills: Charge
+            Charge_Active = false;
+            Wary_Fighter_Active = false;
             // Skills: Swoop
             Swoop_Activated = false;
             Swoop_Attacked = false;
@@ -269,9 +285,9 @@ namespace Tactile
                 case "DETER":
                     return stat(Stat_Labels.Skl) / 2;
                 case "ADEPT":
-                    return stat(Stat_Labels.Spd);
+                    return stat(Stat_Labels.Spd) + 20;
                 case "FRENZY":
-                    return stat(Stat_Labels.Pow) / 2;
+                    return stat(Stat_Labels.Str) / 2;
             }
             return 0;
         }
@@ -357,9 +373,9 @@ namespace Tactile
             if (actor.has_skill("KNIFE"))
                 if (!weapon.is_magic() && !magic && weapon.main_type().Name == "Sword")
                 {
-                    int base_pow = stat(Stat_Labels.Pow) - stat_bonus(Stat_Labels.Pow);
+                    int base_pow = stat(Stat_Labels.Str) - stat_bonus(Stat_Labels.Str);
                     int base_skl = stat(Stat_Labels.Skl) - stat_bonus(Stat_Labels.Skl);
-                    return Math.Min(actor.get_cap(Stat_Labels.Pow), (base_pow + base_skl) / 2) + stat_bonus(Stat_Labels.Pow);
+                    return Math.Min(actor.get_cap(Stat_Labels.Str), (base_pow + base_skl) / 2) + stat_bonus(Stat_Labels.Str);
                 }
             // Skills: Crossbow
             if (actor.has_skill("CROSSBOW"))
@@ -373,7 +389,7 @@ namespace Tactile
         {
             // Skills: Crossbow
             if (!magic && weapon.main_type().Name == "Bow" && !weapon.Ballista() && actor.has_skill("CROSSBOW"))
-                return (stat(Stat_Labels.Pow) + spd) / 2;
+                return (stat(Stat_Labels.Str) + spd) / 2;
 
             return new Maybe<int>();
         }
@@ -409,6 +425,27 @@ namespace Tactile
                     skill_dmg = (weapon_dmg + skill_dmg + 1) / 2;
                     weapon_dmg = (weapon_dmg + 1) / 2;
                     skill_dmg -= weapon_dmg;
+                }
+            // Skills: Domineer
+            if (actor.has_skill("DOMINEER") && target != null)
+                if (!target.actor.class_types.Contains(ClassTypes.Flier) && !target.actor.class_types.Contains(ClassTypes.Cavalry) && !target.actor.class_types.Contains(ClassTypes.FDragon))
+                    skill_dmg += 3;
+            // Skills: Parry
+            if (target != null && target.actor.has_skill("PARRY") && !is_active_team)
+                target_def += 3;
+            // Skills: Riposte
+            if (actor.has_skill("PARRY") && !is_active_team)
+                skill_dmg += 5;
+            // Skills: Charm
+            if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
+                foreach (int id in units_in_range(2))
+                {
+                    Game_Unit unit = Global.game_map.units[id];
+                    if (unit.actor.has_skill("CHARM") && !is_attackable_team(unit))
+                    {
+                        skill_dmg += 2;
+                        break;
+                    }
                 }
             // Skills: Crossbow
             if (actor.has_skill("CROSSBOW")) // maybe move this to atk_pow //Debug
@@ -501,7 +538,7 @@ namespace Tactile
         {
             // Skills: Crossbow (Old)
             if (!magic && weapon.main_type().Name == "Bow" && !weapon.Ballista() && actor.has_skill("OLD_CROSSBOW"))
-                return stat(Stat_Labels.Pow) + stat(Stat_Labels.Skl);
+                return stat(Stat_Labels.Str) + stat(Stat_Labels.Skl);
             return stat(Stat_Labels.Skl) * 2;
         }
 
@@ -516,6 +553,19 @@ namespace Tactile
                 if (name.substring(0, 3) == "HIT" && double.TryParse(name.substring(3, name.Length - 3), out str_test))
                     n += Convert.ToInt32(name.Substring(3, name.Length - 3));
             }
+
+            // Skills: Insight
+            if (actor.has_skill("INSIGHT"))
+            {
+                actor_hit += 10;
+                if (is_active_team)
+                    actor_hit += 10;
+            }
+
+            // Skills: Close Counter
+            if (actor.has_skill("CLOSECOUNTER") && distance == 1)
+                actor_hit -= 10;
+
             // Skills: Knife
             if (actor.has_skill("KNIFE"))
                 if (!weapon.is_magic() && !magic &&
@@ -558,12 +608,27 @@ namespace Tactile
             // Skills: Deus's Guidance
             if (actor.has_skill("DEUS"))
                 actor_hit += 30;
-            // Skills: Prestige
+            // Leadership Bonus
+            int lead_rank = actor.get_weapon_level(Global.weapon_types[11]);
+            if (lead_rank > 1)
+                actor_hit += (lead_rank - 1) * 10;
             if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
                 foreach (int id in units_in_range(3))
                 {
                     Game_Unit unit = Global.game_map.units[id];
-                    if (unit.actor.has_skill("PSTG") && !is_attackable_team(unit))
+                    int leader_rank = unit.actor.get_weapon_level(Global.weapon_types[11]);
+                    if (leader_rank > 1 && same_team(unit))
+                    {
+                        n += (leader_rank - 1) * 10;
+                        break;
+                    }
+                }
+            // Skills: Charisma
+            if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
+                foreach (int id in units_in_range(3))
+                {
+                    Game_Unit unit = Global.game_map.units[id];
+                    if (unit.actor.has_skill("CHARISMA") && !is_attackable_team(unit))
                     {
                         n += 10;
                         break;
@@ -583,11 +648,33 @@ namespace Tactile
                 }
         }
 
+        internal bool crit_skill_check(Game_Unit target)
+        {
+
+            if (nihil(target))
+                return false;
+            if (actor.has_skill("CRITICAL") || (actor.has_skill("WRATH") && actor.hp <= actor.maxhp / 2))
+                return true;
+
+            return false;
+        }
+
         internal void crt_skill(ref int n, ref int weapon_crt, ref int actor_crt,
             Data_Weapon weapon, Game_Unit target, bool magic, int? distance)
         {
             // Skills: Critical +X
             actor_crt += class_crt_bonus;
+
+            // +1 crit for every kill over 50
+            if (weapon != null)
+            {
+                var item = new Item_Data(0, weapon.Id);
+                weapon_crt += Math.Max(item.Kills - 50, 0);
+            }
+
+            // Skills: Wrath
+            if (actor.has_skill("WRATH") && actor.hp <= actor.maxhp / 2)
+                actor_crt = 100;
             // Skills: Prestige
             if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
                 foreach (int id in units_in_range(3))
@@ -658,6 +745,32 @@ namespace Tactile
             // Skills: Set's Litany
             if (actor.has_skill("SET"))
                 actor_avo += 25;
+            // Leadership Bonus
+            int lead_rank = actor.get_weapon_level(Global.weapon_types[11]);
+            if (lead_rank > 1)
+                actor_avo += (lead_rank - 1) * 10;
+            if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
+                foreach (int id in units_in_range(3))
+                {
+                    Game_Unit unit = Global.game_map.units[id];
+                    int leader_rank = unit.actor.get_weapon_level(Global.weapon_types[11]);
+                    if (leader_rank > 1 && same_team(unit))
+                    {
+                        n += (leader_rank - 1) * 10;
+                        break;
+                    }
+                }
+            // Skills: Charisma
+            if (Global.scene.is_map_scene && !nihil(target) && !Global.game_map.is_off_map(Loc))
+                foreach (int id in units_in_range(3))
+                {
+                    Game_Unit unit = Global.game_map.units[id];
+                    if (unit.actor.has_skill("CHARISMA") && !is_attackable_team(unit))
+                    {
+                        n += 10;
+                        break;
+                    }
+                }
         }
 
         internal void base_avo_skill(ref int spd, ref int lck)
@@ -741,6 +854,9 @@ namespace Tactile
         {
             if (!weapon.is_staff())
             {
+                // Skills: Critical
+                if (!actor.has_skill("CRITICAL"))
+                    return 0;
                 // Skills: Trample
                 if (Trample_Activated)
                     return 0;
@@ -820,6 +936,8 @@ namespace Tactile
             // Skills: Slow
             if (actor.has_skill("SLOW"))
                 return true;
+            if (!actor.has_skill("PURSUIT") && !is_active_team)
+                return true;
             return is_doubling_blocked();
         }
 
@@ -891,7 +1009,7 @@ namespace Tactile
             Maybe<int> n = Maybe<int>.Nothing;
             // Skills: Smite
             if (target != null && !nihil(target))
-                if (actor.has_skill("SMITE") && target_weapon != null && !weapon.is_staff() &&
+                if (actor.has_skill("SMITE") && target_weapon != null && !weapon.is_staff() && !weapon.is_secondary_equip() &&
                         (target_weapon.main_type().Name == "Dark" || target_weapon.scnd_type().Name == "Dark"))
                     n = 2;
             return n;
@@ -1295,6 +1413,18 @@ namespace Tactile
             Global.player.loc = Global.game_map.units[ally_id].loc;
         }
 
+        public void dismount_unit()
+        {
+            actor.dismount_unit();
+            wait(true); // Something has to tell the unit to wait, otherwise... well, you can comment this line out and see for yourself
+        }
+
+        public void mount_unit()
+        {
+            actor.mount_unit();
+            wait(true); // Something has to tell the unit to wait, otherwise... well, you can comment this line out and see for yourself
+        }
+
         // Skills: Dash
         #region Dash
         internal bool DashActivated { get; private set; }
@@ -1652,8 +1782,10 @@ namespace Tactile
             int n = stat_bonus(stat);
             switch (stat)
             {
-                case Stat_Labels.Pow:
-                    return this.pow_bonus_display;
+                case Stat_Labels.Str:
+                    return this.str_bonus_display;
+                case Stat_Labels.Mag:
+                    return this.mag_bonus_display;
                 case Stat_Labels.Spd:
                     return this.spd_bonus_display;
                 case Stat_Labels.Def:
@@ -1664,18 +1796,18 @@ namespace Tactile
             return n;
         }
 
-        public int pow_bonus_display
+        public int str_bonus_display
         {
             get
             {
-                int n = stat_bonus(Stat_Labels.Pow);
+                int n = stat_bonus(Stat_Labels.Str);
                 // Skills: Knife
                 if (actor.has_skill("KNIFE"))
                     if (actor.weapon != null && actor.weapon.main_type().Name == "Sword" && !actor.weapon.is_magic())
                     {
-                        int base_pow = stat(Stat_Labels.Pow) - stat_bonus(Stat_Labels.Pow);
+                        int base_pow = stat(Stat_Labels.Str) - stat_bonus(Stat_Labels.Str);
                         int base_skl = stat(Stat_Labels.Skl) - stat_bonus(Stat_Labels.Skl);
-                        n += Math.Min(actor.get_cap(Stat_Labels.Pow), (base_pow + base_skl) / 2) - base_pow;
+                        n += Math.Min(actor.get_cap(Stat_Labels.Str), (base_pow + base_skl) / 2) - base_pow;
                     }
                 // Skills: Mulciber's Steel
                 if (actor.has_skill("MULCIBER"))
@@ -1683,14 +1815,34 @@ namespace Tactile
                 return n;
             }
         }
-        private int pow_bonus_skill
+
+        public int mag_bonus_display
+        {
+            get
+            {
+                int n = stat_bonus(Stat_Labels.Mag);
+                // Skills: Knife
+                if (actor.has_skill("KNIFE"))
+                    if (actor.weapon != null && actor.weapon.main_type().Name == "Sword" && !actor.weapon.is_magic())
+                    {
+                        int base_pow = stat(Stat_Labels.Mag) - stat_bonus(Stat_Labels.Mag);
+                        int base_skl = stat(Stat_Labels.Skl) - stat_bonus(Stat_Labels.Skl);
+                        n += Math.Min(actor.get_cap(Stat_Labels.Mag), (base_pow + base_skl) / 2) - base_pow;
+                    }
+                // Skills: Mulciber's Steel
+                if (actor.has_skill("MULCIBER"))
+                    n += 5;
+                return n;
+            }
+        }
+        private int str_bonus_skill
         {
             get
             {
                 int n = 0;
                 // Skills: Pow+
                 foreach (int skill_id in actor.all_skills
-                    .Where(x => Global.data_skills[x].Abstract.substring(0, 4) == "POW+"))
+                    .Where(x => Global.data_skills[x].Abstract.substring(0, 4) == "STR+"))
                 {
                     double str_test;
                     string name = Global.data_skills[skill_id].Abstract;
@@ -1698,7 +1850,40 @@ namespace Tactile
                         n += Convert.ToInt32(name.Substring(4, name.Length - 4));
                 }
                 // Skills: Affinity+
-                affinity_stat_boost(ref n, Stat_Labels.Pow);
+                affinity_stat_boost(ref n, Stat_Labels.Str);
+                // Skills: Guts
+                if (actor.has_skill("OLD GUTS"))
+                    n += ((actor.maxhp - actor.hp) / 10);
+                // Skills: Focus
+                if (actor.has_skill("FOCUS"))
+                    if (Temp_Moved <= 1 && !(Global.game_system.home_base || Global.game_system.In_Arena || Global.scene.is_test_battle))
+                        n += 4;
+                if (actor.has_skill("OLD FOCUS"))
+                    if (Temp_Moved <= 1 && !(Global.game_system.home_base || Global.game_system.In_Arena || Global.scene.is_test_battle))
+                        n += 2;
+                // Skills: Fire Stone
+                if (actor.has_skill("FIRESTONE"))
+                    n += 10;
+                return n;
+            }
+        }
+
+        private int mag_bonus_skill
+        {
+            get
+            {
+                int n = 0;
+                // Skills: Pow+
+                foreach (int skill_id in actor.all_skills
+                    .Where(x => Global.data_skills[x].Abstract.substring(0, 4) == "MAG+"))
+                {
+                    double str_test;
+                    string name = Global.data_skills[skill_id].Abstract;
+                    if (double.TryParse(name.substring(4, name.Length - 4), out str_test))
+                        n += Convert.ToInt32(name.Substring(4, name.Length - 4));
+                }
+                // Skills: Affinity+
+                affinity_stat_boost(ref n, Stat_Labels.Mag);
                 // Skills: Guts
                 if (actor.has_skill("OLD GUTS"))
                     n += ((actor.maxhp - actor.hp) / 10);
@@ -1751,7 +1936,7 @@ namespace Tactile
                 if (actor.has_skill("CROSSBOW"))
                     if (actor.weapon != null && actor.weapon.main_type().Name == "Bow" && !actor.weapon.Ballista())
                     {
-                        int base_pow = stat(Stat_Labels.Pow) - stat_bonus(Stat_Labels.Pow);
+                        int base_pow = stat(Stat_Labels.Str) - stat_bonus(Stat_Labels.Str);
                         int base_spd = stat(Stat_Labels.Spd) - stat_bonus(Stat_Labels.Spd);
                         //n += Math.Min(spd_cap(), (base_pow + base_spd) / 2) - base_spd; //Debug
                         n += (base_pow + base_spd) / 2 - base_spd;
@@ -1832,6 +2017,9 @@ namespace Tactile
                 }
                 // Skills: Affinity+
                 affinity_stat_boost(ref n, Stat_Labels.Def);
+                //// Skills: Savior
+                if (this.is_rescuing)
+                    n += 4;
                 // Skills: Focus
                 if (actor.has_skill("OLD FOCUS"))
                     if (Temp_Moved <= 1 && !(Global.game_system.home_base || Global.game_system.In_Arena || Global.scene.is_test_battle))
@@ -1930,6 +2118,8 @@ namespace Tactile
             // Skills: Savior
             if (actor.has_skill("SAVIOR"))
                 return true;
+            if (actor.has_skill("HEROISM"))
+                return true;
             return false;
         }
 
@@ -1958,7 +2148,7 @@ namespace Tactile
         #region Movement/Range Affecting
         private bool canto_skill()
         {
-            // Skills: Canto
+            // Skills: Canter
             if (actor.has_skill("CANTO"))
                 return true;
             // Skills: Flight
@@ -1968,8 +2158,8 @@ namespace Tactile
         }
         private bool attack_canto_skill()
         {
-            // Skills: Strafing
-            if (actor.has_skill("STRAFING"))
+            // Skills: Canter
+            if (actor.has_skill("CANTO"))
                 return true;
             // Skills: Trample
             if (Trample_Activated && has_canto())
@@ -1982,6 +2172,8 @@ namespace Tactile
             // Skills: Savior
             if (actor.has_skill("SAVIOR"))
                 return true;
+            if (actor.has_skill("HEROISM"))
+                return true;
             return false;
         }
 
@@ -1989,6 +2181,8 @@ namespace Tactile
         {
             // Skills: Savior
             if (actor.has_skill("SAVIOR"))
+                return true;
+            if (actor.has_skill("HEROISM"))
                 return true;
             return false;
         }
@@ -2050,10 +2244,12 @@ namespace Tactile
 
         private bool can_rescue_skill()
         {
-            // Skills: Drunk
-            if (actor.has_skill("DRUNK"))
-                return false;
-            return true;
+            // Skills: Savior
+            if (actor.has_skill("SAVIOR"))
+                return true;
+            if (actor.has_skill("HEROISM"))
+                return true;
+            return false;
         }
 
         private int mov_plus_skill()
@@ -2102,10 +2298,41 @@ namespace Tactile
         static bool ANY_TERRAIN_PASSABLE = false;
 #endif
 
+        // Attack speed modifiers
+        // Skitty
+        public bool stop_follow_up_modifiers(Game_Unit target)
+        {
+            // Skills: Wary Fighter
+            if (target != null)
+                if (actor.has_skill("WARY") && !target.actor.has_skill("PURSUIT"))
+                {
+                    Wary_Fighter_Active = true;
+                    return true;
+                }
+            return false;
+        }
+
+        public bool always_follow_up_modifiers(Game_Unit target)
+        {
+            if (actor.has_skill("CHARGE") && (target as Game_Unit).actor != null && is_active_team)
+            {
+                int ally_charge = actor.stat(Stat_Labels.Str) + actor.hp;
+                int target_charge = (target as Game_Unit).actor.stat(Stat_Labels.Str) + (target as Game_Unit).actor.hp;
+                if (ally_charge > target_charge && actor.hp >= actor.maxhp / 2)
+                {
+                    Charge_Active = true;
+                    return true;
+                }
+                else
+                    Charge_Active = false;
+            }
+            return false;
+        }
+
         private int min_range_skill(Data_Weapon weapon, int min_range)
         {
             // Skills: Point Blank Shot
-            if (actor.has_skill("PNTBLNK"))
+            if (actor.has_skill("CLOSECOUNTER"))
                 if (weapon.main_type().Name == "Bow" && min_range == 2)
                     return 1;
             return min_range;
@@ -2114,7 +2341,7 @@ namespace Tactile
         private int max_range_skill(Data_Weapon weapon, int max_range)
         {
             // Skills: Longbow
-            if (actor.has_skill("LONGBOW"))
+            if (actor.has_skill("STRONGBOW"))
                 if (weapon.main_type().Name == "Bow" && !weapon.Ballista())
                     return max_range + 1;
             // Skills: Knife
@@ -2133,7 +2360,7 @@ namespace Tactile
         {
             // Skills: Anticipation
             Anticipation_Equip = actor.equipped;
-            if (actor.has_skill("ANTICI"))
+            if (actor.has_skill("ANTICI") || boss)
                 if (!weapon1.No_Counter && !can_counter(attacker, weapon1, distance))
                     for (int i = 0; i < Global.ActorConfig.NumItems; i++)
                         if (can_counter(attacker, weapon1, distance, i))
@@ -2161,22 +2388,23 @@ namespace Tactile
         #region MOVE COST MODS
         readonly static Dictionary<string, Dictionary<int, Tuple<bool, int>>> MOVE_COST_MODS =
             new Dictionary<string, Dictionary<int, Tuple<bool, int>>> {
-                { "FRSTMV", new Dictionary<int, Tuple<bool, int>> {
-                    { 12, new Tuple<bool, int>(false, -1) } // Forest
-                }},
-                { "NMDMV", new Dictionary<int, Tuple<bool, int>> {
+                { "PATH", new Dictionary<int, Tuple<bool, int>> {
                     { 12, new Tuple<bool, int>(false, -1) }, // Forest
-                    { 15, new Tuple<bool, int>(false, -1) }, // Desert
-                    { 16, new Tuple<bool, int>(true, 5) }, // River
-                    { 17, new Tuple<bool, int>(false, -1) } // Hill
+                    { 13, new Tuple<bool, int>(false, 2) } // Thicket
                 }},
-                { "SEAMV", new Dictionary<int, Tuple<bool, int>> {
+                { "SWIM", new Dictionary<int, Tuple<bool, int>> {
                     { 16, new Tuple<bool, int>(true, 2) }, // River
                     { 21, new Tuple<bool, int>(true, 2) }, // Sea
                     { 22, new Tuple<bool, int>(true, 3) }, // Lake
                     { 60, new Tuple<bool, int>(true, 3) } // Water
                 }},
-                { "MNTNMV", new Dictionary<int, Tuple<bool, int>> {
+                { "BURROW", new Dictionary<int, Tuple<bool, int>> {
+                    { 16, new Tuple<bool, int>(true, 2) }, // River
+                    { 21, new Tuple<bool, int>(true, 2) }, // Sea
+                    { 22, new Tuple<bool, int>(true, 3) }, // Lake
+                    { 60, new Tuple<bool, int>(true, 3) } // Water
+                }},
+                { "CLIMB", new Dictionary<int, Tuple<bool, int>> {
                     { 17, new Tuple<bool, int>(false, -1) }, // Hill
                     { 18, new Tuple<bool, int>(true, 4) } // Peak
                 }}
@@ -2291,14 +2519,19 @@ namespace Tactile
                 new Color(48, 16, 64, 96),
                 new Color(32, 16, 40, 40), 3f) },
             //{ "DREAD", new UnitAura("DREAD", new Color(40, 16, 48, 104)) },
-            { "PSTG", new UnitAura("PSTG",
+            { "CHARM", new UnitAura("CHARM",
+                new Color(8, 40, 48, 40),
+                new Color(16, 48, 72, 40), 3f) },
+
+            { "CHARISMA", new UnitAura("CHARISMA",
                 new Color(48, 32, 8, 40),
                 new Color(72, 56, 16, 40), 3f) }
             //{ "PSTG", new UnitAura("PSTG", new Color(72, 56, 16, 64)) }
         };
         public readonly static List<string> AURA_COLOR_ORDER = new List<string>{
             "DREAD",
-            "PSTG",
+            "CHARISMA",
+            "CHARM",
             "SANC"
         };
 
@@ -2311,7 +2544,10 @@ namespace Tactile
             if (actor.has_skill("DREAD"))
                 return true;
             // Skills: Prestige
-            if (actor.has_skill("PSTG"))
+            if (actor.has_skill("CHARISMA"))
+                return true;
+            // Skills: Prestige
+            if (actor.has_skill("CHARM"))
                 return true;
 
             return false;
@@ -2325,10 +2561,12 @@ namespace Tactile
             // Skills: Dreaded
             if (actor.has_skill("DREAD"))
                 return "DREAD";
-            // Skills: Prestige
-            if (actor.has_skill("PSTG"))
-                return "PSTG";
-
+            // Skills: Charisma
+            if (actor.has_skill("CHARISMA"))
+                return "CHARISMA";
+            // Skills: Charm
+            if (actor.has_skill("CHARM"))
+                return "CHARM";
             return null;
         }
 
@@ -2340,9 +2578,12 @@ namespace Tactile
             // Skills: Dreaded
             if (actor.has_skill("DREAD"))
                 return 3;
-            // Skills: Prestige
-            if (actor.has_skill("PSTG"))
+            // Skills: Charisma
+            if (actor.has_skill("CHARISMA"))
                 return 3;
+            // Skills: Charm
+            if (actor.has_skill("CHARM"))
+                return 2;
 
             return 1;
         }
@@ -2354,9 +2595,20 @@ namespace Tactile
             if (actor.has_skill("GUTS"))
             {
                 int n = Math.Max(0, ((actor.maxhp - actor.hp) / 10));
-                set_stat_bonus(Buffs.Pow, n);
+                set_stat_bonus(Buffs.Str, n);
                 set_stat_bonus(Buffs.Skl, n);
                 set_stat_bonus(Buffs.Lck, n);
+            }
+            if (actor.has_skill("RESOLVE") && actor.hp <= actor.maxhp / 2)
+            {
+                set_stat_bonus(Buffs.Def, 5);
+                set_stat_bonus(Buffs.Res, 5);
+            }
+            if (actor.has_skill("DETERMINATION") && actor.hp <= actor.maxhp / 2)
+            {
+                set_stat_bonus(Buffs.Str, 5);
+                set_stat_bonus(Buffs.Skl, 5);
+                set_stat_bonus(Buffs.Spd, 5);
             }
         }
 
@@ -2392,15 +2644,21 @@ namespace Tactile
         {
             // Skills: Vantage
             if (target != null && !nihil(target))
-                if (actor.has_skill("VANT") && !target.overrides_ambush_counter())
+            {
+                if (actor.has_skill("VANT") && actor.hp <= actor.maxhp / 2 && !target.overrides_ambush_counter())
                     return true;
+                if (actor.has_skill("DETERMINATION") && actor.hp <= actor.maxhp / 2 && !target.overrides_ambush_counter())
+                    return true;
+            }
             return false;
         }
 
         public bool overrides_ambush_counter()
         {
             // Skills: Vantage
-            if (actor.has_skill("VANT"))
+            if (actor.has_skill("VANT") && actor.hp <= actor.maxhp / 2)
+                return true;
+            if (actor.has_skill("DETERMINATION") && actor.hp <= actor.maxhp / 2)
                 return true;
             return false;
         }

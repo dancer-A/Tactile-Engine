@@ -13,6 +13,8 @@ namespace Tactile.Menus.Map.Unit
         Trample = 3,
         Sacrifice = 4,
         Refuge = 5,
+        Dismount = 6,
+        Mount = 7,
         OldSwoop = 20
     }
 
@@ -100,6 +102,23 @@ namespace Tactile.Menus.Map.Unit
                         commands.Insert(index + 0, "Refuge");
                         AddSkillIndex(index - 1, SkillMenuIds.Refuge);
                     }
+                }
+                // Dismount
+                if (unit.actor.can_dismount()) // can this unit dismount?
+                {
+                    if (!unit.actor.is_dismounted) // Has this unit already dismounted? If not, give the option
+                    {
+                        int index = commands.IndexOf("Item"); // Find wherever in the menu the item command should go, and place this command under that
+                        commands.Insert(index + 1, "Dismount"); // The text of the command's menu option is set here
+                        AddSkillIndex(index, SkillMenuIds.Dismount);
+                    }
+                }
+                // Remount
+                if (unit.actor.is_dismounted) // Has this unit already dismounted? If so, give the option
+                {
+                    int index = commands.IndexOf("Item"); // Find wherever in the menu the item command should go, and place this command under that
+                    commands.Insert(index + 1, "Mount"); // The text of the command's menu option is set here
+                    AddSkillIndex(index, SkillMenuIds.Mount);
                 }
                 // Skills: Dash
                 if (unit.actor.has_skill("DASH"))

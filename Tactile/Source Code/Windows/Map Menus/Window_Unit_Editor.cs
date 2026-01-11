@@ -38,8 +38,8 @@ namespace Tactile.Windows.Map
 
         protected List<TextSprite> Data = new List<TextSprite>(), Data_Labels = new List<TextSprite>();
         protected RightAdjustedText[] Battle_Stats = new RightAdjustedText[8];
-        protected TextSprite[] Stat_Labels = new TextSprite[9];
-        protected RightAdjustedText[] Stats = new RightAdjustedText[9];
+        protected TextSprite[] Stat_Labels = new TextSprite[10];
+        protected RightAdjustedText[] Stats = new RightAdjustedText[10];
         protected TextSprite[] Combat_Stat_Labels = new TextSprite[7];
         protected RightAdjustedText[] Combat_Stats = new RightAdjustedText[7];
         protected List<Item_Icon_Sprite> Item_Icons = new List<Item_Icon_Sprite>();
@@ -202,14 +202,15 @@ namespace Tactile.Windows.Map
             }
 
             Stat_Labels[0].text = "Hp";
-            Stat_Labels[1].text = "Pow";
-            Stat_Labels[2].text = "Skl";
-            Stat_Labels[3].text = "Spd";
-            Stat_Labels[4].text = "Lck";
-            Stat_Labels[5].text = "Def";
-            Stat_Labels[6].text = "Res";
-            Stat_Labels[7].text = "Con";
-            Stat_Labels[8].text = "Rank";
+            Stat_Labels[1].text = "Str";
+            Stat_Labels[2].text = "Mag";
+            Stat_Labels[3].text = "Dex";
+            Stat_Labels[4].text = "Spd";
+            Stat_Labels[5].text = "Lck";
+            Stat_Labels[6].text = "Def";
+            Stat_Labels[7].text = "Res";
+            Stat_Labels[8].text = "Bld";
+            Stat_Labels[9].text = "Rank";
             for (int i = 0; i < Stats.Length; i++)
             {
                 Stats[i] = new RightAdjustedText();
@@ -353,7 +354,7 @@ namespace Tactile.Windows.Map
                     }
                     else
                     {
-                        if (test_battler.Items[i].is_weapon && !actor.is_equippable(test_battler.Items[i].to_weapon))
+                        if (test_battler.Items[i].is_weapon && !actor.is_equippable(test_battler.Items[i].to_weapon) && !actor.is_secondary_equippable(test_battler.Items[i].to_weapon))
                             Data[item_index].SetColor(Global.Content, "Grey");
 
                         try
@@ -388,7 +389,7 @@ namespace Tactile.Windows.Map
             // Stats
             for (int i = 0; i < Stats.Length; i++)
             {
-                if (i == 8)
+                if (i == 9)
                 {
                     Stats[i].text = actor.rating().ToString();
                     Stats[i].SetColor(Global.Content, "Blue");
@@ -1319,7 +1320,7 @@ namespace Tactile.Windows.Map
             }
 
             for (int i = 0; i < Weapons.Count; i++)
-                if (Global.data_weapons.ContainsKey(Weapons[i]) && temp_actor.is_equippable(Global.data_weapons[Weapons[i]]))
+                if (Global.data_weapons.ContainsKey(Weapons[i]) && (temp_actor.is_equippable(Global.data_weapons[Weapons[i]]) || temp_actor.is_secondary_equippable(Global.data_weapons[Weapons[i]])))
                 {
                     test_battler.Weapon_Id = Weapons[i];
                     break;

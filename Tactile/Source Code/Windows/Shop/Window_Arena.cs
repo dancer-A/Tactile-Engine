@@ -251,7 +251,10 @@ namespace Tactile
                     int dmgTri = (Weapon_Triangle.DMG_BONUS - Config.ARENA_WTA_DMG_OVERRIDE) *
                         (tri == WeaponTriangle.Advantage ? 1 : -1);
                     // Adjust pow and def/res to account for wta bonus
-                    opponent.actor.gain_stat(Stat_Labels.Pow, dmgTri);
+                    if (opponent.actor.class_types.Contains(ClassTypes.Mage))
+                        opponent.actor.gain_stat(Stat_Labels.Mag, dmgTri);
+                    else
+                        opponent.actor.gain_stat(Stat_Labels.Str, dmgTri);
                     opponent.actor.gain_stat(Stat_Labels.Def, dmgTri);
                     opponent.actor.gain_stat(Stat_Labels.Res, dmgTri);
                 }
@@ -266,22 +269,51 @@ namespace Tactile
             int rounds_to_kill = (int)Math.Ceiling(
                 ((float)opponent.actor.maxhp) / Math.Max(1, dmg = stats.dmg_per_round()));
             // While gladiator rounds to kill unit is more than unit's (max 6), increase gladiator Pow
-            while ((dmg = opponent_stats.dmg_per_round()) <=
-                unit.actor.maxhp / Math.Max(2, Math.Min(6, rounds_to_kill - 1)) &&
-                !opponent.actor.get_capped(Stat_Labels.Pow))
+            if ((opponent.actor.class_types.Contains(ClassTypes.Mage)))
             {
-                opponent.actor.gain_stat(Stat_Labels.Pow, 2);
-                opponent.actor.gain_stat(Stat_Labels.Def, -1);
-                opponent.actor.gain_stat(Stat_Labels.Res, -1);
+                while ((dmg = opponent_stats.dmg_per_round()) <=
+                    unit.actor.maxhp / Math.Max(3, Math.Min(6, rounds_to_kill - 1)) &&
+                    !opponent.actor.get_capped(Stat_Labels.Mag))
+                {
+                    opponent.actor.gain_stat(Stat_Labels.Mag, 2);
+                    opponent.actor.gain_stat(Stat_Labels.Def, -1);
+                    opponent.actor.gain_stat(Stat_Labels.Res, -1);
+                }
+            }
+            else
+            {
+                while ((dmg = opponent_stats.dmg_per_round()) <=
+                    unit.actor.maxhp / Math.Max(3, Math.Min(6, rounds_to_kill - 1)) &&
+                    !opponent.actor.get_capped(Stat_Labels.Str))
+                {
+                    opponent.actor.gain_stat(Stat_Labels.Str, 2);
+                    opponent.actor.gain_stat(Stat_Labels.Def, -1);
+                    opponent.actor.gain_stat(Stat_Labels.Res, -1);
+                }
             }
             // While gladiator can one round unit, decrease Pow
-            while ((dmg = opponent_stats.dmg_per_round()) >=
-                unit.actor.maxhp &&
-                opponent.actor.stat(Stat_Labels.Pow) > 0)
+            if ((opponent.actor.class_types.Contains(ClassTypes.Mage)))
             {
-                opponent.actor.gain_stat(Stat_Labels.Pow, -1);
-                opponent.actor.gain_stat(Stat_Labels.Def, 1);
-                opponent.actor.gain_stat(Stat_Labels.Res, 1);
+                while ((dmg = opponent_stats.dmg_per_round()) >=
+                unit.actor.maxhp &&
+                opponent.actor.stat(Stat_Labels.Mag) > 0)
+                {
+                    opponent.actor.gain_stat(Stat_Labels.Mag, -1);
+                    opponent.actor.gain_stat(Stat_Labels.Def, 1);
+                    opponent.actor.gain_stat(Stat_Labels.Res, 1);
+                }
+            }
+            else
+            {
+                while ((dmg = opponent_stats.dmg_per_round()) >=
+                unit.actor.maxhp &&
+                opponent.actor.stat(Stat_Labels.Str) > 0)
+                {
+                    opponent.actor.gain_stat(Stat_Labels.Str, -1);
+                    opponent.actor.gain_stat(Stat_Labels.Spd, -1);
+                    opponent.actor.gain_stat(Stat_Labels.Def, 1);
+                    opponent.actor.gain_stat(Stat_Labels.Res, 1);
+                }
             }
             while ((hit = opponent_stats.hit()) <= Config.MIN_ARENA_HIT &&
                 !opponent.actor.get_capped(Stat_Labels.Skl))

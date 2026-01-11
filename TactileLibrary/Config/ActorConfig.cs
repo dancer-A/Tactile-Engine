@@ -379,14 +379,15 @@ namespace TactileLibrary.Config
             if (ResetLevelOnPromotion)
                 return RawLevelCap(tier);
             else
-            {
-                int cap = 0;
-                for (int currentTier = LowestTier; currentTier <= tier; currentTier++)
-                {
-                    cap += RawLevelCap(currentTier);
-                }
-                return cap;
-            }
+                //{
+                //    int cap = 0;
+                //    for (int currentTier = LowestTier; currentTier <= tier; currentTier++)
+                //    {
+                //        cap += RawLevelCap(currentTier);
+                //    }
+                //    return cap;
+                //}
+                return RawLevelCap(tier);
         }
 
         //private
@@ -409,8 +410,8 @@ namespace TactileLibrary.Config
         public int LevelsBeforeTier(int tier)
         {
             int level = 0;
-            for (int currentTier = LowestTier; currentTier < tier; currentTier++)
-                level += RawLevelCap(currentTier);
+            //for (int currentTier = LowestTier; currentTier < tier; currentTier++)
+            //    level += RawLevelCap(currentTier);
 
             return level;
         }
@@ -430,6 +431,7 @@ namespace TactileLibrary.Config
                 case 0:
                     return Tier0LvlCap;
                 case 1:
+                    return PromotionLvl;
                 default:
                     return LvlCap;
             }

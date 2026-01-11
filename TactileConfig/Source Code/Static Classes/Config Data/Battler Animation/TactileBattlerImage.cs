@@ -388,6 +388,7 @@ namespace Tactile
                 case 102: // Elfire
                     return offset.list_add(distance == 1 ? new List<int>() { 5, (hit ? 7 : 3) } : new List<int>() { 2, (hit ? 7 : 3) });
                 case 103: // Arcfire
+                case 105: // Valflame
                     return offset.list_add(distance == 1 ? new List<int>() { 5, (hit ? 9 : 3) } : new List<int>() { 2, (hit ? 9 : 3) });
                 case 111: // Thunder
                     return offset.list_add(distance == 1 ? new List<int>() { 64 } : new List<int>() { 62 });
@@ -530,6 +531,7 @@ namespace Tactile
                 case 102: // Elfire
                     return offset.list_add(hit ? new List<int>() { 8 } : new List<int>() { 6 });
                 case 103: // Arcfire
+                case 105: // Valflame
                     return offset.list_add(hit ? new List<int>() { 10 } : new List<int>() { 6 });
                 case 111: // Thunder
                     return offset.list_add(new List<int>() { 63 });
@@ -681,7 +683,7 @@ namespace Tactile
         };
         #endregion
 
-        public readonly static int[] Single_Gender_Map_Sprite = new int[] { 22, 23, 31, 32, 34, 53, 60, 61, 69, 70, 71, 72, 73, 106, 107 };
+        public readonly static int[] Single_Gender_Map_Sprite = new int[] { 22, 23, 31, 32, 34, 53, 69, 70, 71, 72, 73 };
         public readonly static int[] Single_Gender_Battle_Sprite = new int[] { 22, 23, 34, 60, 61, 71, 72, 73 };
 
         internal static IBattlerAnimsService Animation_Battler_Data { get; private set; }

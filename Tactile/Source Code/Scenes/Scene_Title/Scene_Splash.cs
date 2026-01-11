@@ -10,7 +10,7 @@ namespace Tactile
 {
     class Scene_Splash : Scene_Base
     {
-        private readonly static string GAME_SITE = "yoursite.herethough/yourgame";
+        private readonly static string GAME_SITE = "www dot big baby shaboing";
 
         private readonly static string[] DISCLAIMERS =
         {
@@ -29,7 +29,7 @@ This game is still being developed, so new content will be
 added and existing content may be modified or removed.
 Expect unfinished features, and you might encounter bugs.
 
-Visit http://{1} for more information,
+Visit {1} for more information,
 or to give any feedback, and above all, have fun!"
 #endif
         };

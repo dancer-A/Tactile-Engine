@@ -129,7 +129,7 @@ namespace Tactile.Menus.Map.Unit
                 // Seize
                 if (Global.game_map.get_seize_points(unit.team, unit.group).Contains(unit.loc) && unit.can_seize)
                 {
-                    commands.Add("Seize");
+                    commands.Add("Conquer");
                     IndexRedirect.Add(14);
                 }
                 // Escape
@@ -342,6 +342,20 @@ namespace Tactile.Menus.Map.Unit
 
             if (commands.Count == 0 && unit.cantoing)
             {
+
+                // Visit
+                if (unit.can_visit() && !Canto.HasEnumFlag(Canto_Records.Visit))
+                {
+                    string visit_name = Global.game_map.visit_locations[unit.loc].Name;
+                    commands.Add(!string.IsNullOrEmpty(visit_name) ? visit_name : "Visit");
+                    IndexRedirect.Add(7);
+                }
+                // Seize
+                if (Global.game_map.get_seize_points(unit.team, unit.group).Contains(unit.loc) && unit.can_seize && !Canto.HasEnumFlag(Canto_Records.Seize))
+                {
+                    commands.Add("Conquer");
+                    IndexRedirect.Add(14);
+                }
                 // Wait
                 AddWaitCommand(commands);
                 // Status
@@ -414,6 +428,16 @@ namespace Tactile.Menus.Map.Unit
             if (canto.HasEnumFlag(Canto_Records.Take))
                 return true;
             return false;
+        }
+
+        private static bool CantoAllowsVisit(Canto_Records canto)
+        {
+            if (canto.HasEnumFlag(Canto_Records.Visit))
+                return true;
+
+            if (canto.HasEnumFlag(Canto_Records.Seize))
+                return true;
+            return true;
         }
         private static bool CantoAllowsItem(Canto_Records canto)
         {

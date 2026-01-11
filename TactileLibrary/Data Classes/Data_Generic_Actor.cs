@@ -11,8 +11,8 @@ namespace TactileLibrary
         public string Name;
         public string MiniFaceName = "";
         public string Description = "";
-        public List<int> BaseStats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
-        public List<int> Growths = new List<int> { 0, 0, 0, 0, 0, 0, 0 };
+        public List<int> BaseStats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public List<int> Growths = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
         public List<int> Skills = new List<int>();
 
         #region TactileDataContent
