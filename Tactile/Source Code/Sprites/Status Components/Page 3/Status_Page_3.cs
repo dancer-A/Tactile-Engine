@@ -150,7 +150,7 @@ namespace Tactile
             Supports_Window.stereoscopic = Config.STATUS_RIGHT_WINDOW_DEPTH;
             // Affinity
             nodes.Add(new StatusAffinityUINode(
-                "Affin",
+                "Blood",
                 (Game_Unit unit) => unit.actor.affin));
             nodes.Last().loc = Supports_Window.loc + new Vector2(40, 8);
             nodes.Last().stereoscopic = Config.STATUS_RIGHT_WINDOW_DEPTH;
