@@ -21,7 +21,7 @@ namespace Tactile
             {  3,  3 }, // Elixir
             {  4,  4 }, // Antitoxin
             {  5,  5 }, // Pure Water
-            { 15, 15 }, // Torch
+            { 11, 11 }, // Torch
             { 91, 91 }, // Deus's Geas
             { 92, 91 }, // Mulciber's Iron
             { 93, 91 }, // Set's Litany
@@ -249,8 +249,8 @@ namespace Tactile
                     }
             }},
             #endregion
-            #region 15: Torch
-            { 15, new Map_Effect_Data { image = new KeyValuePair<string, int>("Torch", 30),
+            #region 11: Torch
+            { 11, new Map_Effect_Data { image = new KeyValuePair<string, int>("Torch", 30),
                 animation_data = new List<KeyValuePair<int[], int>>
                     {
                         new KeyValuePair<int[], int>(new int[]{ 0, 255, 0 }, 5),

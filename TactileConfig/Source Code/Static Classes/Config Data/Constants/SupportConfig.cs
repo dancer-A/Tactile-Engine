@@ -6,7 +6,7 @@ namespace Tactile.Constants
     public class Support
     {
         // Maximum support levels an actor can gain
-        public const int SUPPORT_TOTAL = 5;
+        public const int SUPPORT_TOTAL = 11;
         // Radius of support bonuses
         public const int SUPPORT_RANGE = 3;
 
