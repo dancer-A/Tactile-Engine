@@ -825,6 +825,18 @@ public int sort_weapon_id
                 Global.ActorConfig.CasualModeLives : 1;
         }
 
+        public void special_stat_bonuses(String s)
+        {
+            switch (s)
+            {
+                case "Finn-Ch1":
+                    gain_stat(Stat_Labels.Str, 1);
+                    gain_stat(Stat_Labels.Skl, 1);
+                    gain_stat(Stat_Labels.Def, 1);
+                    break;
+            }
+        }
+
         public void setup_generic(
             int class_id, int level, int exp, int prepromote_levels,
             Generic_Builds build, int con,
@@ -2641,12 +2653,12 @@ public int sort_weapon_id
         /// <summary>
         /// Returns true the unit is able to re-mount
         /// </summary>
-        public bool can_remount()
-        {
-            if (remount_skill())
-                return true;
-            return false;
-        }
+        //public bool can_remount()
+        //{
+        //    if (remount_check())
+        //        return true;
+        //    return false;
+        //}
         #endregion
 
         /// <summary>

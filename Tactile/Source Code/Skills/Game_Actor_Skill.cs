@@ -796,17 +796,14 @@ namespace Tactile
             return false;
         }
 
-        private bool remount_skill()
-        {
-            if (class_types.Contains(ClassTypes.Cavalry))
-                return true;
-            if (class_types.Contains(ClassTypes.Flier))
-            {
-                // don't allow if the terrain is not passable by infantry & heavy
-                return true;
-            }
-            return false;
-        }
+        //private bool remount_check()
+        //{
+
+        //    // don't allow if the terrain is not passable by cavalry or fliers
+        //    if (t.Id == 23 || terrain.Id == 29 || terrain.Id == 31 || terrain.Id == 32 || terrain.Id == 33 || terrain.Id == 45 || terrain.Id == 67)
+        //        return false;
+        //    return true;
+        //}
 
         // Dismount
         public void dismount_unit()

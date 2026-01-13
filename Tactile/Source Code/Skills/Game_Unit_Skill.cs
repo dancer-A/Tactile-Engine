@@ -659,6 +659,14 @@ namespace Tactile
             return false;
         }
 
+        private bool remount_check()
+        {
+            // don't allow if the terrain is not passable by cavalry or fliers
+            if (terrain_id() == 23 || terrain_id() == 29 || terrain_id() == 31 || terrain_id() == 32 || terrain_id() == 33 || terrain_id() == 45 || terrain_id() == 67)
+                return false;
+            return true;
+        }
+
         internal void crt_skill(ref int n, ref int weapon_crt, ref int actor_crt,
             Data_Weapon weapon, Game_Unit target, bool magic, int? distance)
         {

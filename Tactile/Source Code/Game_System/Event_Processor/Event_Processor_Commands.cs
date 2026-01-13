@@ -2800,6 +2800,16 @@ namespace Tactile
                     }
                     break;
                 #endregion
+                case "Actor Stat Increase":
+                    #region Increase any specific unit's stats
+                    // Value[1] = actorid
+                    // Value[2] = Whatever Stat buff
+                    get_actor("false", command.Value[1], out actor);
+                    if (actor != null)
+                        actor.special_stat_bonuses(command.Value[2]);
+                    Index++;
+                    return true;
+                #endregion
                 case "Transfer Blessings":
                 #region Transfer Blessings; increases the stats of an actor by the blessings of another actor
                     // Value[1] = Source Actor Id
@@ -2842,6 +2852,16 @@ namespace Tactile
                   // Value[1] = Song Name
                   Global.game_state.preparations_theme_override = command.Value[1];
                   break;
+                #endregion
+                case "Dismount Unit":
+                #region Dismount Unit
+                    // Value[1] = ActorId
+                    get_actor("false", command.Value[1], out actor);
+                    if (actor != null && actor.can_dismount())
+                    {
+                        actor.dismount_unit();
+                    }
+                    break;
                 #endregion
 #if DEBUG
                 default:

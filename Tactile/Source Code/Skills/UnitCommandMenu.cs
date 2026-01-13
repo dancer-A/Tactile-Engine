@@ -114,7 +114,7 @@ namespace Tactile.Menus.Map.Unit
                     }
                 }
                 // Remount
-                if (unit.actor.is_dismounted) // Has this unit already dismounted? If so, give the option
+                if (unit.actor.is_dismounted && unit.can_remount()) // Has this unit already dismounted? If so, check the tile they're on and see if they can, if they can, give the option
                 {
                     int index = commands.IndexOf("Item"); // Find wherever in the menu the item command should go, and place this command under that
                     commands.Insert(index + 1, "Mount"); // The text of the command's menu option is set here

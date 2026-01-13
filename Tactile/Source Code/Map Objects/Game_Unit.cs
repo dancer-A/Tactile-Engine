@@ -3573,8 +3573,17 @@ public int priority
             if (item_data.is_weapon && item_data.to_weapon.Rank == Weapon_Ranks.None)
                 return false;
             // Check that AS is >= target AS
-            // If the item is a weapon, thief AS is adjusted as if they equipped it
+            // If the item is a weapon, thief must be higher level to take it too
+            if (item_data.is_weapon || item_data.is_secondary)
+                return this.actor.level > target.actor.level;
             return atk_spd(1, item_data) >= target.stat(Stat_Labels.Spd);
+        }
+
+        public bool can_remount()
+        {
+            if (remount_check())
+                return true;
+            return false;
         }
 
         public bool can_seize
