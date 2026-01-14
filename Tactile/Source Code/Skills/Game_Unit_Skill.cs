@@ -2628,7 +2628,10 @@ namespace Tactile
                 n += (actor.maxhp * 25) / 100; //5; //Debug
             // Skills: Renewal
             if (actor.has_skill("RENEW"))
-                n += (int)(actor.maxhp * 0.15f);
+                n += (int)(actor.maxhp * 0.2f);
+            // Skills: Imbue
+            if (actor.has_skill("IMBUE"))
+                n += (actor.stat(Stat_Labels.Mag)) * 2;
             // Skills: Provision
             if (Global.scene.is_map_scene && !Global.game_map.is_off_map(Loc))
                 foreach (int id in units_in_range(1))
