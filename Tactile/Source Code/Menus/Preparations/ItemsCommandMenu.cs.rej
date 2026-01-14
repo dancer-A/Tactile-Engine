@@ -1,0 +1,12 @@
+diff a/Tactile/Source Code/Menus/Preparations/ItemsCommandMenu.cs b/Tactile/Source Code/Menus/Preparations/ItemsCommandMenu.cs	(rejected hunks)
+@@ -94,8 +94,8 @@
+             else
+                 Window.set_text_color(3, "Grey");
+ 
+-            // Restock
+-            if (Global.battalion.has_convoy && this.actor.CanRestock())
++            // Repair
++            if (Global.game_battalions.active_repair_shop != null && this.actor.CanRepair())
+                 Window.set_text_color(5, "White");
+             else
+                 Window.set_text_color(5, "Grey");

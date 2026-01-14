@@ -3217,12 +3217,10 @@ namespace Tactile
                 }
         }
 
-        internal void add_shop(Vector2 loc, Shop_Data shop, bool home_base_shop = false, bool repair = false)
+        internal void add_shop(Vector2 loc, Shop_Data shop, bool home_base_shop = false)
         {
             if (home_base_shop)
                 Global.game_battalions.set_convoy_shop(shop);
-            else if (repair)
-                Global.game_battalions.set_repair_shop(shop);
             else
             {
                 if (shop.secret)
