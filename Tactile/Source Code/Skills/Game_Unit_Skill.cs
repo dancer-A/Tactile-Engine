@@ -753,6 +753,12 @@ namespace Tactile
             // Skills: Set's Litany
             if (actor.has_skill("SET"))
                 actor_avo += 25;
+            // Skills: Prayer
+            if (actor.has_skill("PRAYER") && target != null)
+            {
+                if (!nihil(target) && actor.hp < 11)
+                    actor_avo += (11 - actor.hp) * 10;
+            }
             // Leadership Bonus
             int lead_rank = actor.get_weapon_level(Global.weapon_types[11]);
             if (lead_rank > 1)
@@ -860,11 +866,12 @@ namespace Tactile
 
         internal int crt_target_skill(Game_Unit target, Data_Weapon weapon, int? distance, int crt)
         {
+            bool can_crit = false;
             if (!weapon.is_staff())
             {
                 // Skills: Critical
-                if (!actor.has_skill("CRITICAL"))
-                    return 0;
+                if (actor.has_skill("CRITICAL"))
+                    can_crit = true;
                 // Skills: Trample
                 if (Trample_Activated)
                     return 0;
@@ -879,8 +886,23 @@ namespace Tactile
                 // Skills: Frenzy
                 if (actor.frenzy_activated)
                     crt *= 2;
+                // Bonds
+                if (Global.scene.is_map_scene && !Global.game_map.is_off_map(Loc))
+                    foreach (int id in units_in_range(1))
+                    {
+                        Game_Unit unit = Global.game_map.units[id];
+                        if (actor.bond == unit.actor.id)
+                        {
+                            can_crit = true;
+                            crt += 20;
+                            break;
+                        }
+                    }
             }
-            return crt;
+            if (can_crit)
+                return crt;
+            else
+                return 0;
         }
 
         // Deals with added effects for skills, largely life steal
@@ -2632,6 +2654,17 @@ namespace Tactile
             // Skills: Imbue
             if (actor.has_skill("IMBUE"))
                 n += (actor.stat(Stat_Labels.Mag)) * 2;
+            // Skills: Blessing
+            if (Global.scene.is_map_scene && !Global.game_map.is_off_map(Loc))
+                foreach (int id in units_in_range(1))
+                {
+                    Game_Unit unit = Global.game_map.units[id];
+                    if (unit.actor.has_skill("BLESSING") && !is_attackable_team(unit))
+                    {
+                        n += unit.actor.stat(Stat_Labels.Mag) / 2;
+                        break;
+                    }
+                }
             // Skills: Provision
             if (Global.scene.is_map_scene && !Global.game_map.is_off_map(Loc))
                 foreach (int id in units_in_range(1))

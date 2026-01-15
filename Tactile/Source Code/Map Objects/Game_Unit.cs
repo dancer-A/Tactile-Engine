@@ -1668,8 +1668,12 @@ public int priority
                         return 1 + 1;
                     // If enough faster than the opponent, attack twice, blocked if opponent charge is active
                     if (actor.has_skill("PURSUIT") && spd > target_spd)
+                    {
                         if (!(target as Game_Unit).Charge_Active)
                             return 2;
+                        else
+                            return 1;
+                    }
                     if (spd - Constants.Combat.DBL_ATK_SPD >= target_spd)
                         return 2;
                 }
