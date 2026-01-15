@@ -743,6 +743,8 @@ public int priority
             if (weapon_id != null)
                 speed -= wgt_penalty((int)weapon_id);
             // Add skill/etc bonuses and return
+            if (Constants.Combat.NEGATIVE_AS)
+                return speed + stat_bonus(Stat_Labels.Spd);
             return Math.Max(0, speed) + stat_bonus(Stat_Labels.Spd);
         }
 
@@ -763,6 +765,8 @@ public int priority
                 return atk_spd(distance, item_data.to_weapon);
 
             int speed = spd();
+            if (Constants.Combat.NEGATIVE_AS)
+                return speed;
             return Math.Max(0, speed);
         }
         internal int atk_spd(int distance, Data_Weapon weapon)
@@ -779,7 +783,8 @@ public int priority
                 // If an equipped weapon is being tested, get the wgt penalty for it
                 speed -= wgt_penalty(weapon.Id);
             }
-
+            if (Constants.Combat.NEGATIVE_AS)
+                return speed;
             return Math.Max(0, speed);
         }
 
@@ -942,6 +947,8 @@ public int priority
                     wgt += actor.weapon_wgt(actor.secondary_equip);
                 }
             int wgt_factor = stat(Stat_Labels.Con) / 2;
+            if (actor.weapon != null && actor.weapon.is_always_magic())
+                wgt_factor += stat(Stat_Labels.Str);
             return (wgt_factor < wgt ? wgt - wgt_factor : 0);
         }
 

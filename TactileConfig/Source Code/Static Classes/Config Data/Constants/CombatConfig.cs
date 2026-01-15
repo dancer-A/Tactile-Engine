@@ -10,6 +10,7 @@ namespace Tactile.Constants
         public const int CURSE_BACKFIRE_RATE = 1; // Chance for a cursed weapon to backfire with capped Luck
         public const float LIFE_STEAL_MULT = 0.5f; // Amount of damage to return as health for life steal attribute weapons
         public const int DBL_ATK_SPD = 5;
+        public const bool NEGATIVE_AS = true; // Can attack speed become negative?
         public const float CRIT_MULT = 3f;
         public const bool CRIT_SKILL = true; // Do you need the critical skill to inflict critical hits?
         public const int BASE_COMBAT_EXP = 10;
