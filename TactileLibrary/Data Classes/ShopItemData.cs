@@ -8,15 +8,15 @@ namespace TactileLibrary
         {
             ShopItemData result;
 
-            result = new ShopItemData(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+            result = new ShopItemData(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
             reader.ReadBoolean(); // Needed for Drops flag
 
             return result;
         }
 
-        public ShopItemData(Item_Data_Type type, int id, int uses)
+        public ShopItemData(Item_Data_Type type, int id, int uses, int kill = 0)
             : base(type, id, uses) { }
-        public ShopItemData(int type, int id, int uses)
+        public ShopItemData(int type, int id, int uses, int kill = 0)
             : base(type, id, uses) { }
 
         public override void consume_use()
