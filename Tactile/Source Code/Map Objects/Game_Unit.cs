@@ -2251,6 +2251,14 @@ public int priority
                 return this.team == Constants.Team.PLAYER_TEAM;
             }
         }
+        public bool is_friendly
+        {
+            get
+            {
+                return team == Constants.Team.PLAYER_TEAM ||
+                    team == Constants.Team.CITIZEN_TEAM;
+            }
+        }
         public bool is_enemy
         {
             get
@@ -4299,7 +4307,7 @@ public int priority
                     charge_masteries(MASTERY_RATE_NEW_TURN);
             //@Yeti: This should be somewhere different? or refresh_unit()
             // shouldn't call this function
-            if (!Constants.Support.PLAYER_SUPPORT_ONLY || is_player_team)
+            if (!Constants.Support.PLAYER_SUPPORT_ONLY || is_friendly)
                 // This inherently only allows gaining support points with members of the same team for efficiency
                 foreach (int unit_id in Global.game_map.teams[Team])
                 {

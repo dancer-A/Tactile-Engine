@@ -15,7 +15,7 @@ namespace Tactile.Constants
         public readonly static List<string> SUPPORT_LETTERS = new List<string> { "-", "C", "B", "A", "S" };
         public const int MAX_SUPPORT_LEVEL = 3;
         public const int BOND_SUPPORT_RANK = 4;
-        public const bool PLAYER_SUPPORT_ONLY = true; // Can only player units gain support points
+        public const bool PLAYER_SUPPORT_ONLY = false; // Can only player units gain support points
 
         public const int MAX_SUPPORT_POINTS = 999; // The maximum number of points a support rank can require; support progress won't count higher
         public const int ADJACENT_SUPPORT_POINTS = 3;
