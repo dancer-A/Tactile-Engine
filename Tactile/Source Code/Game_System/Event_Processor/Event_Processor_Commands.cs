@@ -2835,12 +2835,22 @@ namespace Tactile
                   break;
                 #endregion
                 case "Dismount Unit":
-                #region Dismount Unit
+                #region Force unit to dismount
                     // Value[1] = ActorId
                     get_actor("false", command.Value[1], out actor);
                     if (actor != null && actor.can_dismount())
                     {
                         actor.dismount_unit();
+                    }
+                    break;
+                #endregion
+                case "Remount Unit":
+                #region Force unit to remount
+                    // Value[1] = ActorId
+                    get_actor("false", command.Value[1], out actor);
+                    if (actor != null)
+                    {
+                        actor.mount_unit();
                     }
                     break;
                 #endregion
@@ -3965,6 +3975,19 @@ namespace Tactile
                     get_actor(command.Value[1], command.Value[2], out actor);
                     if (actor != null)
                         result = actor.tier >= process_number(command.Value[3]);
+                    break;
+                case "Thief":
+                    // Value[1] = id is for a unit, or for an actor?
+                    // Value[2] = id
+                    get_actor(command.Value[1], command.Value[2], out actor);
+                    if (actor != null)
+                    {
+                        int classid = actor.class_id;
+                        if (classid == 11 || classid == 12 || classid == 69)
+                            result = true;
+                        else
+                            result = false;
+                    }
                     break;
                 case "Health":
                 case "HP":

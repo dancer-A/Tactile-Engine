@@ -182,7 +182,7 @@ namespace TactileLibrary
             if (can_repair && item_data.is_weapon)
             {
                 Data_Weapon weapon = item_data.to_weapon;
-                if (!weapon.is_staff() && weapon.Uses > 0 && item_data.Uses < weapon.Uses)
+                if (weapon.Uses > 0 && item_data.Uses < weapon.Uses)
                     return true;
             }
             return false;
