@@ -270,9 +270,9 @@ namespace Tactile
             {
                 // Masteries that charge
                 case "ASTRA":
-                    return stat(Stat_Labels.Spd);
+                    return stat(Stat_Labels.Spd) * 2;
                 case "LUNA":
-                    return stat(Stat_Labels.Skl);
+                    return stat(Stat_Labels.Skl) * 2;
                 case "SOL":
                     return stat(Stat_Labels.Lck) * 2;
                 case "SPRLDVE":
@@ -285,7 +285,7 @@ namespace Tactile
                 case "DETER":
                     return stat(Stat_Labels.Skl) / 2;
                 case "ADEPT":
-                    return stat(Stat_Labels.Spd) + 20;
+                    return atk_spd() + 20;
                 case "FRENZY":
                     return stat(Stat_Labels.Str) / 2;
             }
@@ -2346,8 +2346,8 @@ namespace Tactile
         {
             if (actor.has_skill("CHARGE") && (target as Game_Unit).actor != null && is_active_team)
             {
-                int ally_charge = actor.stat(Stat_Labels.Str) + actor.hp;
-                int target_charge = (target as Game_Unit).actor.stat(Stat_Labels.Str) + (target as Game_Unit).actor.hp;
+                int ally_charge = actor.stat(Stat_Labels.Str) + actor.hp / 2;
+                int target_charge = (target as Game_Unit).actor.stat(Stat_Labels.Str) + (target as Game_Unit).actor.hp / 2;
                 if (ally_charge > target_charge && actor.hp >= actor.maxhp / 2)
                 {
                     Charge_Active = true;

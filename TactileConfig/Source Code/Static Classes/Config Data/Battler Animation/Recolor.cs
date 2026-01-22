@@ -458,8 +458,10 @@ namespace Tactile
 
         public readonly static Dictionary<string, string> SPRITE_RENAME_LIST = new Dictionary<string, string>
         {
-            { "Diluglio", "Verdane" },
-            
+            { "Diluglio", "Verdane" }, // chp-2
+            { "Earl", "Verdane" }, // ch1
+            { "Vejar", "Loptous" }, // ch1-f
+
             { "Etruria_Hemda", "Etruria" },
             { "Merc_Bern", "Bern" },
             { "Merc_Ilia", "Ilia" },

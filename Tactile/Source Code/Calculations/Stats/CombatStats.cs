@@ -285,7 +285,8 @@ namespace Tactile.Calculations.Stats
                 support_hit = support_bonus(Combat_Stat_Labels.Hit);
                 s_bonus = 0;
                 hit_rate = Math.Max(0, actor_hit + weapon_hit + skill_hit + support_hit + s_bonus);
-                boss_staff = target.boss;
+                if (Global.game_system.Difficulty_Mode == Difficulty_Modes.Hard)
+                    boss_staff = target.boss;
             }
             else
             {

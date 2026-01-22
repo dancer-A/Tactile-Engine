@@ -1807,11 +1807,37 @@ public int priority
                     actor.gain_stat(Stat_Labels.Lck, 1);
                     actor.gain_stat(Stat_Labels.Def, 1);
                     break;
+
+                // Cimbaeth
+                case 105:
+                    actor.gain_stat(Stat_Labels.Hp, 5);
+                    actor.gain_stat(Stat_Labels.Str, 2);
+                    actor.gain_stat(Stat_Labels.Skl, 1);
+                    actor.gain_stat(Stat_Labels.Spd, 2);
+                    actor.gain_stat(Stat_Labels.Lck, 3);
+                    actor.gain_stat(Stat_Labels.Def, 3);
+                    actor.gain_stat(Stat_Labels.Res, 2);
+                    break;
+
                 // Munnir
-                case 182:
-                    actor.gain_stat(Stat_Labels.Hp, 6);
-                    actor.hp += 6;
-                    actor.gain_stat(Stat_Labels.Def, 2);
+                case 104:
+                    actor.gain_stat(Stat_Labels.Hp, 8);
+                    actor.gain_stat(Stat_Labels.Str, 4);
+                    actor.gain_stat(Stat_Labels.Skl, 3);
+                    actor.gain_stat(Stat_Labels.Spd, 3);
+                    actor.gain_stat(Stat_Labels.Lck, 2);
+                    actor.gain_stat(Stat_Labels.Def, 3);
+                    actor.gain_stat(Stat_Labels.Res, 3);
+                    break;
+
+                // Sandima
+                case 108:
+                    actor.gain_stat(Stat_Labels.Str, 2);
+                    actor.gain_stat(Stat_Labels.Mag, 3);
+                    actor.gain_stat(Stat_Labels.Skl, 3);
+                    actor.gain_stat(Stat_Labels.Spd, 2);
+                    actor.gain_stat(Stat_Labels.Lck, 1);
+                    actor.gain_stat(Stat_Labels.Def, 1);
                     break;
             }
         }

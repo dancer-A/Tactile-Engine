@@ -52,7 +52,7 @@ namespace Tactile.Constants
             { Affinities.Naga,      new float[] { 0.5f, 0.5f, 2.5f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
             { Affinities.Loptous,   new float[] { 0.5f, 0.5f, 2.5f, 2.5f, 2.5f, 2.5f } }, // 2Off, 2Def
             
-            { Affinities.None,      new float[] {   0f,   0f, 2.5f,   0f,   0f, 2.5f } }
+            { Affinities.None,      new float[] {   0f,   0f, 2.5f, 2.5f,   0f,   0f } }
         };
         // The support bonus for a bond, default is one support rank worth of every stat
         public readonly static float[] BOND_BOOSTS = new float[] { 1f, 1f, 5f, 5f, 5f, 5f };

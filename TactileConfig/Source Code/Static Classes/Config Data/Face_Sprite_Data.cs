@@ -68,11 +68,13 @@ namespace Tactile
             { "Citizen_Woman", "Woman1Villager" },
             { "Citizen_Girl", "Girl1Villager" },
         };
-        
+
         public readonly static Dictionary<string, FaceToGeneric> FACE_TO_GENERIC_RENAME =
             new Dictionary<string, FaceToGeneric>
         {
             { "Diluglio",    new FaceToGeneric("CohortM-3",     "Verdane") },
+            { "Earl",    new FaceToGeneric("FighterM-2",     "Verdane") },
+            { "Vejar",    new FaceToGeneric("MyrmidonM-2",     "Loptous") },
         };
         public readonly static Dictionary<string, FaceCountryRecolor> FACE_COUNTRY_RENAME =
             new Dictionary<string, FaceCountryRecolor>

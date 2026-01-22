@@ -2452,19 +2452,23 @@ namespace Tactile
         // Shop Inventory
         private void command_shop_inventory(Shop_Data shop)
         {
-            while (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 85)
-            {
+            if (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 201)
                 Index++;
-                shop.add_items(command.Value.Select(str =>
+            {
+                while (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 85)
                 {
-                    string[] item_str = str.Split(
-                        new string[] { ", " },
-                        StringSplitOptions.RemoveEmptyEntries);
-                    return new ShopItemData(
-                        process_number(item_str[0]),
-                        process_number(item_str[1]),
-                        process_number(item_str[2]));
-                }));
+                    Index++;
+                    shop.add_items(command.Value.Select(str =>
+                    {
+                        string[] item_str = str.Split(
+                            new string[] { ", " },
+                            StringSplitOptions.RemoveEmptyEntries);
+                        return new ShopItemData(
+                            process_number(item_str[0]),
+                            process_number(item_str[1]),
+                            process_number(item_str[2]));
+                    }));
+                }
             }
         }
 
@@ -2835,9 +2839,10 @@ namespace Tactile
                   break;
                 #endregion
                 case "Dismount Unit":
-                #region Force unit to dismount
-                    // Value[1] = ActorId
-                    get_actor("false", command.Value[1], out actor);
+                    #region Force unit to dismount
+                    // Value[1] = id is for a unit, or for an actor
+                    // Value[2] = id
+                    get_actor(command.Value[1], command.Value[2], out actor);
                     if (actor != null && actor.can_dismount())
                     {
                         actor.dismount_unit();
@@ -2845,9 +2850,10 @@ namespace Tactile
                     break;
                 #endregion
                 case "Remount Unit":
-                #region Force unit to remount
-                    // Value[1] = ActorId
-                    get_actor("false", command.Value[1], out actor);
+                    #region Force unit to remount
+                    // Value[1] = id is for a unit, or for an actor
+                    // Value[2] = id
+                    get_actor(command.Value[1], command.Value[2], out actor);
                     if (actor != null)
                     {
                         actor.mount_unit();
@@ -4047,6 +4053,14 @@ namespace Tactile
                     var ownedItemData = new Item_Data(process_number(command.Value[1]),
                         process_number(command.Value[2]));
                     result = Global.battalion.ItemOwned(ownedItemData);
+                    break;
+                case "Number Owned":
+                    // Value[1] = item type
+                    // Value[2] = item id
+                    // Value[3] = Amount to check
+                    var numItemData = new Item_Data(process_number(command.Value[1]),
+                        process_number(command.Value[2]));
+                    result = Global.battalion.item_count(numItemData) >= process_number(command.Value[3]);
                     break;
                 case "Mission":
                     // Value[1] = id

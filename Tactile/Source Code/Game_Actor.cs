@@ -372,7 +372,7 @@ namespace Tactile
                         "Actor {0} has invalid class id {1}",
                         this.name_full, class_id));
 
-                if (is_dismounted || states.Contains(21)) // dismount status
+                if (is_dismounted) // dismount status
                 {
                     switch (class_id)
                     {
@@ -917,7 +917,11 @@ public int sort_weapon_id
             for (int i = 0; i <= (int)Stat_Labels.Con; i++)
             {
                 if (i == (int)Stat_Labels.Con)
+                {
                     Data.BaseStats[i] = con == -1 ? generic_stats[0][i] : con;
+                    if (Global.game_system.Difficulty_Mode == Difficulty_Modes.Hard)
+                        Data.BaseStats[i]++;
+                }
                 // Setting this to -1 automatically uses the class bases, and updates them if they change
                 else
                     Data.BaseStats[i] = -1;
@@ -996,8 +1000,8 @@ public int sort_weapon_id
                     difficulty_bonus = 0;
                     break;
                 case Difficulty_Modes.Hard:
-                //case Difficulty_Modes.Lunatic: //Debug
-                //    difficulty_bonus = 0.2f;
+                    difficulty_bonus = 0.25f;
+                    break;
                 default:
                     // 1.1x multiplier to growths, instead of +5% to each
                     difficulty_bonus = 0.1f;

@@ -22,7 +22,7 @@ namespace Tactile.Constants
 
         public readonly static List<string> HARD_MODE_BLOCKED = new List<string> { };
 
-        public const string WORLDMAP_THEME = "A Hint of Things to Come";
+        public const string WORLDMAP_THEME = "Glorious Grannvale";
 
         public const bool SEPARATE_CHAPTERS_INTO_ARCS = true;
 

@@ -1178,7 +1178,7 @@ namespace Tactile
 
             Global.Audio.BgmFadeOut(15);
             //Global.Audio.play_se("Battle Sounds", "Promotion3");
-            Global.Audio.play_se("System Sounds", "Arena_Victory");
+            Global.Audio.play_se("System Sounds", "Castle_Seized");
             Ranking_Window = new Window_Ranking();
         }
 

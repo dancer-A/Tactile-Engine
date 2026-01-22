@@ -384,7 +384,7 @@ namespace Tactile
                     return offset.list_add(distance == 1 ? new List<int>() { 260 } : new List<int>() { 261 });
                 case 101: // Fire
                     return offset.list_add(distance == 1 ? new List<int>() { 5, 3 } : new List<int>() { 2, 3 });
-                case 45: // Flame Lance
+                case 14: // Flame Sword
                 case 102: // Elfire
                     return offset.list_add(distance == 1 ? new List<int>() { 5, (hit ? 7 : 3) } : new List<int>() { 2, (hit ? 7 : 3) });
                 case 103: // Arcfire
@@ -392,7 +392,7 @@ namespace Tactile
                     return offset.list_add(distance == 1 ? new List<int>() { 5, (hit ? 9 : 3) } : new List<int>() { 2, (hit ? 9 : 3) });
                 case 111: // Thunder
                     return offset.list_add(distance == 1 ? new List<int>() { 64 } : new List<int>() { 62 });
-                case 70: // Bolt Axe
+                case 15: // Levin Sword
                 case 112: // Elthunder
                     return offset.list_add(distance == 1 ? new List<int>() { 67 } : new List<int>() { 65 });
                 case 113: // Arcthunder
@@ -401,34 +401,34 @@ namespace Tactile
                     return offset.list_add(new List<int>() { 74 });
                 case 121: // Wind
                     return offset.list_add(distance == 1 ? new List<int>() { 125 } : new List<int>() { 122 });
-                case 15: // Wind Sword
+                case 16: // Sonic Sword
                 case 122: // Elwind
                     return offset.list_add(new List<int>() { distance == 1 ? 131 : 126, hit ? 127 : 128 });
                 case 123: // Arcwind
                     return offset.list_add(new List<int>() { distance == 1 ? 131 : 126, hit ? 127 : 128 }); //Yeti
-                case 12: // Light Brand
+                case 23: // Light Brand
                 case 131: // Lightning
                     return offset.list_add(distance == 1 ? new List<int>() { 183 } : new List<int>() { 181 });
-                case 132: // Shine
+                case 133: // Ellight
                     return offset.list_add(distance == 1 ? new List<int>() { 187, 185 } : new List<int>() { 184, 185 });
-                case 133: // Divine
+                case 136: // Divine
                     return offset.list_add(distance == 1 ? new List<int>() { 191, 189 } : new List<int>() { 188, 189 });
-                case 134: // Resire
+                case 137: // Resire
                     return offset.list_add(distance == 1 ? new List<int>() { 260 } : new List<int>() { 261 }); //Yeti
-                case 135: // Purge
+                case 134: // Purge
                     return offset.list_add(new List<int>() { 192, 193, 194, 195 });
                 case 141: // Shade
                     return offset.list_add(distance == 1 ? new List<int>() { 243 } : new List<int>() { 241 });
                 case 142: // Flux
                     return offset.list_add(distance == 1 ? new List<int>() { 247 } : new List<int>() { 244 });
-                case 143: // Worm
+                case 143: // Jormungandr
                     if (hit)
                         return offset.list_add(distance == 1 ? new List<int>() { 253, 250 } : new List<int>() { 249, 250 });
                     else
                         return offset.list_add(distance == 1 ? new List<int>() { 253 } : new List<int>() { 249 });
                 case 144: // Hekat
                     return offset.list_add(distance == 1 ? new List<int>() { 270, 268 } : new List<int>() { 267, 268 });
-                case 146: // Fenrir
+                case 145: // Fenrir
                     return offset.list_add(distance == 1 ? new List<int>() { 278, 276 } : new List<int>() { 275, 276 });
                 case 151: // Heal
                     return offset.list_add(new List<int>() { 301 });
@@ -470,7 +470,7 @@ namespace Tactile
                     return offset.list_add(distance == 1 ? new List<int>() { 73 } : new List<int>() { 70 });
                 case 142: // Flux
                     return offset.list_add(distance == 1 ? new List<int>() { 248 } : new List<int>() { 245 });
-                case 143: // Worm
+                case 143: // Jormungandr
                     return offset.list_add(distance == 1 ? new List<int>() { 254 } : new List<int>() { 251 });
             }
             return new List<int>();
@@ -527,7 +527,7 @@ namespace Tactile
                     return offset.list_add(hit ? new List<int>() { 262 } : new List<int>() { 262, 266 });
                 case 101: // Fire
                     return offset.list_add(hit ? new List<int>() { 4 } : new List<int>() { 6 });
-                case 45: // Flame Lance
+                case 14: // Flame Sword
                 case 102: // Elfire
                     return offset.list_add(hit ? new List<int>() { 8 } : new List<int>() { 6 });
                 case 103: // Arcfire
@@ -535,7 +535,7 @@ namespace Tactile
                     return offset.list_add(hit ? new List<int>() { 10 } : new List<int>() { 6 });
                 case 111: // Thunder
                     return offset.list_add(new List<int>() { 63 });
-                case 70: // Bolt Axe
+                case 15: // Levin Sword
                 case 112: // Elthunder
                     return offset.list_add(new List<int>() { 66 });
                 case 113: // Arcthunder
@@ -544,31 +544,31 @@ namespace Tactile
                     return offset.list_add(new List<int>() { 75 });
                 case 121: // Wind
                     return offset.list_add(hit ? new List<int>() { 123 } : new List<int>() { 124 });
-                case 15: // Wind Sword
+                case 16: // Sonic Sword
                 case 122: // Elwind
                     return offset.list_add(hit ? new List<int>() { 129 } : new List<int>() { 130 });
                 case 123: // Arcwind
                     return offset.list_add(hit ? new List<int>() { 129 } : new List<int>() { 130 }); //Yeti
-                case 12: // Light Brand
+                case 23: // Light Brand
                 case 131: // Lightning
                     return offset.list_add(new List<int>() { 182 });
-                case 132: // Shine
+                case 133: // Shine
                     return offset.list_add(new List<int>() { 186 });
-                case 133: // Divine
+                case 136: // Divine
                     return offset.list_add(new List<int>() { 190 });
-                case 134: // Resire
+                case 137: // Resire
                     return offset.list_add(hit ? new List<int>() { 262 } : new List<int>() { 262, 266 }); //Yeti
-                case 135: // Purge
+                case 134: // Purge
                     return offset.list_add(new List<int>() { 196 });
                 case 141: // Shade
                     return offset.list_add(new List<int>() { 242 });
                 case 142: // Flux
                     return offset.list_add(new List<int>() { 246 });
-                case 143: // Worm
+                case 143: // Jormungandr
                     return offset.list_add(hit ? new List<int>() { 252 } : new List<int>() { 255 });
                 case 144: // Hekat
                     return offset.list_add(new List<int>() { 269 });
-                case 146: // Fenrir
+                case 145: // Fenrir
                     return offset.list_add(new List<int>() { 277 });
                 case 158: // Restore
                     return offset.list_add(new List<int>() { 328 });
@@ -596,7 +596,7 @@ namespace Tactile
             {
                 case 18: // Runesword
                     return offset.list_add(new List<int>() { distance == 1 ? 263 : 264 });
-                case 134: // Resire
+                case 137: // Resire
                     return offset.list_add(new List<int>() { distance == 1 ? 263 : 264 }); //Yeti
             }
             return new List<int>();
@@ -684,7 +684,7 @@ namespace Tactile
         #endregion
 
         public readonly static int[] Single_Gender_Map_Sprite = new int[] { 22, 23, 31, 32, 34, 53, 69, 70, 71, 72, 73 };
-        public readonly static int[] Single_Gender_Battle_Sprite = new int[] { 22, 23, 34, 60, 61, 71, 72, 73 };
+        public readonly static int[] Single_Gender_Battle_Sprite = new int[] { 22, 23, 34, 61, 71, 72, 73 };
 
         internal static IBattlerAnimsService Animation_Battler_Data { get; private set; }
         public static IBattlerAnimsService animation_battler_data
