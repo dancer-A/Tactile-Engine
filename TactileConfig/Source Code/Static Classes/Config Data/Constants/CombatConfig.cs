@@ -13,6 +13,8 @@ namespace Tactile.Constants
         public const bool NEGATIVE_AS = true; // Can attack speed become negative?
         public const float CRIT_MULT = 3f;
         public const bool CRIT_SKILL = true; // Do you need the critical skill to inflict critical hits?
+        public const int CRIT_MIN = 50; // minumum number of KOs to gain Critical
+        public const int CRIT_MAX = 100; // highest amount of kills that are tracked for the bonus crit
         public const int BASE_COMBAT_EXP = 10;
         public const int STEAL_EXP = 10;
         public const int DANCE_EXP = 10;

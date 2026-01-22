@@ -48,7 +48,7 @@ namespace Tactile
             //@Yeti: handle weapon type replacement skills better than hardcoding
             bool knife = (actor != null && actor.has_skill("KNIFE") && weapon.main_type().Name == "Sword" && !weapon.is_magic());
             bool crossbow = (actor != null && actor.has_skill("CROSSBOW") && weapon.main_type().Name == "Bow" && !weapon.Ballista());
-            bool crit_bonus = kill_counter > 50;
+            bool crit_bonus = kill_counter >= Constants.Combat.CRIT_MIN;
 
             Labels[0].text = weapon.type;
             if (knife)
@@ -161,21 +161,21 @@ namespace Tactile
                     Stat_Bonuses[Stat_Bonuses.Count - 1].text = "+10";
                 }
                 Stats[4].text = weapon.Crt == -1 ? "--" : weapon.Crt.ToString();
-                if (crit_bonus)
-                {
-                    Stat_Bonuses.Add(new TextSprite());
-                    Stat_Bonuses[Stat_Bonuses.Count - 1].loc = Stats[4].loc - Stats[4].offset + new Vector2(0, 0);
-                    Stat_Bonuses[Stat_Bonuses.Count - 1].SetFont(
-                        Config.UI_FONT + "Bonus", Global.Content, "Green", Config.UI_FONT);
-                    Stat_Bonuses[Stat_Bonuses.Count - 1].text = "+" + (kill_counter - 50).ToString();
-                }
+                //if (crit_bonus)
+                //{
+                //    Stat_Bonuses.Add(new TextSprite());
+                //    Stat_Bonuses[Stat_Bonuses.Count - 1].loc = Stats[4].loc - Stats[4].offset + new Vector2(0, 0);
+                //    Stat_Bonuses[Stat_Bonuses.Count - 1].SetFont(
+                //        Config.UI_FONT + "Bonus", Global.Content, "Green", Config.UI_FONT);
+                //    Stat_Bonuses[Stat_Bonuses.Count - 1].text = "+" + (kill_counter - 50).ToString();
+                //}
             }
             // Kill Counter
             if (kill_counter > 0)
             {
                 Labels[6].loc.X += 124;
                 Stats[5].loc.X += 124;
-                if (kill_counter >= 50)
+                if (kill_counter >= Constants.Combat.CRIT_MIN)
                     Stats[5].SetFont(Config.UI_FONT, Global.Content, "Green");
                 Stats[5].text = kill_counter.ToString();
             }

@@ -872,6 +872,20 @@ namespace Tactile
                 // Skills: Critical
                 if (actor.has_skill("CRITICAL"))
                     can_crit = true;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    Item_Data item_data = actor.items[i];
+                    if (item_data.is_weapon && item_data.Id == weapon.Id)
+                    {
+                        if (item_data.Kills >= Constants.Combat.CRIT_MIN)
+                        {
+                            crt += Math.Min(item_data.Kills - Constants.Combat.CRIT_MIN, Constants.Combat.CRIT_MAX);
+                            can_crit = true;
+                        }
+                        else
+                            can_crit = false;
+                    }
+                }
                 // Skills: Trample
                 if (Trample_Activated)
                     return 0;
