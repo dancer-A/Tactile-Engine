@@ -65,6 +65,8 @@ namespace TactileLibrary
             get { return !non_equipment && to_equipment.infinite_uses; }
         }
         public bool out_of_uses { get { return Uses == 0 && !infinite_uses; } }
+
+        public bool KO_max { get { return Kills >= 100; } }
         #endregion
 
         #region Serialization
@@ -113,7 +115,17 @@ namespace TactileLibrary
                 Kills = 0;
         }
         public Item_Data(int type, int id) : this((Item_Data_Type)type, id) { }
-        public Item_Data(Item_Data_Type type, int id, int uses, int kills = 0, bool drops = false)
+
+        public Item_Data(Item_Data_Type type, int id, int uses, int kills = 0)
+        {
+            Type = type;
+            Id = id;
+            if (!this.non_equipment)
+                Uses = this.max_uses;
+                Kills = 0;
+        }
+        public Item_Data(int type, int id, int uses) : this((Item_Data_Type)type, id, uses) { }
+        public Item_Data(Item_Data_Type type, int id, int uses, int kills, bool drops = false)
         {
             Type = type;
             Id = id;
@@ -121,7 +133,7 @@ namespace TactileLibrary
             Kills = kills;
             Drops = drops;
         }
-        public Item_Data(int type, int id, int uses, int kill = 0) : this((Item_Data_Type)type, id, uses, kill) { }
+        public Item_Data(int type, int id, int uses, int kill) : this((Item_Data_Type)type, id, uses, kill) { }
         public Item_Data(Item_Data data) : this(data.Type, data.Id, data.Uses, data.Kills) { }
 
         public bool is_weapon

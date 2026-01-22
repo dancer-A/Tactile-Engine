@@ -26,15 +26,15 @@ namespace Tactile
 
             int stats = (!weapon.is_staff() && !weapon.is_secondary_equip()) ? 6 : 3;
             bool effective = false;
-            foreach(int bonus in weapon.Effectiveness)
+            if (kill_counter > 0)
+                stats++;
+            foreach (int bonus in weapon.Effectiveness)
                 if (bonus != 1)
                 {
                     effective = true;
                     stats++;
                     break;
                 }
-            if (kill_counter > 0 && !effective)
-                stats++;
             for (int i = 0; i < stats; i++)
             {
                 Labels.Add(new TextSprite());
@@ -63,11 +63,16 @@ namespace Tactile
                 Labels[3].text = "Mgt";
                 Labels[4].text = "Hit";
                 Labels[5].text = "Crit";
-                if (kill_counter > 0)
-                    Labels[6].text = "KO";
             }
-            if (effective)
-                Labels[Labels.Count - 1].text = "Effective";
+            if (kill_counter > 0)
+            {
+                Labels[6].text = "KO";
+                if (effective)
+                    Labels[7].text = "Effective";
+            }
+            else if (effective)
+                Labels[6].text = "Effective";
+
 
             // Rank
             Rank = new TextSprite();
@@ -167,8 +172,19 @@ namespace Tactile
             }
             // Kill Counter
             if (kill_counter > 0)
+            {
+                Labels[6].loc.X += 124;
+                Stats[5].loc.X += 124;
+                if (kill_counter >= 50)
+                    Stats[5].SetFont(Config.UI_FONT, Global.Content, "Green");
                 Stats[5].text = kill_counter.ToString();
+            }
             if (effective)
+            {
+                if (kill_counter > 0)
+                    Labels[7].loc.X = 0;
+                else
+                    Labels[6].loc.X = 0;
                 for (int i = 0; i < weapon.Effectiveness.Length; i++)
                     if (weapon.Effectiveness[i] != 1)
                     {
@@ -176,23 +192,17 @@ namespace Tactile
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].texture = Global.Content.Load<Texture2D>(@"Graphics/Icons/Class_Types");
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].size = new Vector2(16, 16);
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].columns = 1;
-                        if (kill_counter > 0)
-                            Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
-                                64 + ((Effectiveness_Icons.Count - 1) * 16), 32);
-                        else
-                            Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
-                                48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
+                        Effectiveness_Icons[Effectiveness_Icons.Count - 1].loc = new Vector2(
+                            48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
                         Effectiveness_Icons[Effectiveness_Icons.Count - 1].index = i;
 
                         Effectiveness_Multipliers.Add(new Effective_WT_Arrow());
                         Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].loc = new Vector2(
                             48 + ((Effectiveness_Icons.Count - 1) * 16), 32);
-                        if (kill_counter > 0)
-                            Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(24, 8);
-                        else
-                            Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(8, 8);
+                        Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].draw_offset = new Vector2(8, 8);
                         Effectiveness_Multipliers[Effectiveness_Icons.Count - 1].set_effectiveness(weapon.Effectiveness[i]);
                     }
+            }
         }
 
         public void update()

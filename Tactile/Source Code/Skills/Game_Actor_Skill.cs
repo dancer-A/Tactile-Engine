@@ -779,7 +779,7 @@ namespace Tactile
 
         internal bool KO_counter_Check(Item_Data item)
         {
-            if (item.Kills >= 50)
+            if (item.Kills >= 5)
                 return true;
             return false;
         }
@@ -810,7 +810,7 @@ namespace Tactile
         {
             this.Dismounted = true;
             this.Mounted = false;
-            this.add_state(21);
+            //this.add_state(21);
             /// Real function of the example skill goes here. If you want to attach some
             /// kind of animation to the skill, take a look at how sacrifice does that
             /// through (Game_Sacrifice_State). Basically, it's a component of the Game_State
@@ -823,7 +823,7 @@ namespace Tactile
         {
             this.Dismounted = false;
             this.Mounted = true;
-            this.remove_state(21);
+            //this.remove_state(21);
             /// Real function of the example skill goes here. If you want to attach some
             /// kind of animation to the skill, take a look at how sacrifice does that
             /// through (Game_Sacrifice_State). Basically, it's a component of the Game_State

@@ -57,6 +57,23 @@ namespace Tactile.Calculations.Stats
                 }
             }
         }
+
+        //internal Data_Item attacker_item
+        //{
+        //    get
+        //    {
+        //        if (!using_actor_weapon)
+        //        {
+        //            if (WeaponId == 0)
+        //                return null;
+        //            return Global.data_items[WeaponId];
+        //        }
+        //        else
+        //        {
+        //            return attacker.actor.item;
+        //        }
+        //    }
+        //}
         internal bool has_weapon
         {
             get
@@ -231,7 +248,7 @@ namespace Tactile.Calculations.Stats
                 return 0;
             Data_Weapon weapon = this.attacker_weapon;
 
-            if (weapon.is_staff())
+            if (weapon.is_staff() || weapon.is_secondary_equip())
                 return 0;
 
             if (!can_crit())
@@ -254,19 +271,24 @@ namespace Tactile.Calculations.Stats
         public bool can_crit()
         {
             Data_Weapon weapon = this.attacker_weapon;
-            var item = new Item_Data(0, attacker_weapon.Id);
+            bool crit_check;
+            var item = new Item_Data();
+            int ko = item.Kills;
             if (weapon == null)
                 return false;
 
-            if (weapon.is_staff() || weapon.is_secondary_equip())
+            //if (weapon.is_staff() || weapon.is_secondary_equip())
+            //    return false;
+
+            if (Constants.Combat.CRIT_SKILL)
+                crit_check = attacker.crit_skill_check(null);
+            if (!crit_check)
+                if (Constants.Combat.CRIT_SKILL)
+                    crit_check = attacker.actor.KO_counter_Check(item);
+            if (crit_check)
+                return weapon.Crt >= 0;
+            else
                 return false;
-
-            if (Constants.Combat.CRIT_SKILL)
-                return attacker.crit_skill_check(null);
-            if (Constants.Combat.CRIT_SKILL)
-                return attacker.actor.KO_counter_Check(item);
-
-            return weapon.Crt >= 0;
         }
         #endregion
 
