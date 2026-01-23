@@ -116,15 +116,17 @@ namespace TactileLibrary
         }
         public Item_Data(int type, int id) : this((Item_Data_Type)type, id) { }
 
-        public Item_Data(Item_Data_Type type, int id, int uses, int kills = 0)
+        public Item_Data(Item_Data_Type type, int id, int uses)
         {
             Type = type;
             Id = id;
             if (!this.non_equipment)
-                Uses = this.max_uses;
+                Uses = uses;
+            if (!this.non_equipment)
                 Kills = 0;
         }
         public Item_Data(int type, int id, int uses) : this((Item_Data_Type)type, id, uses) { }
+
         public Item_Data(Item_Data_Type type, int id, int uses, int kills, bool drops = false)
         {
             Type = type;
@@ -133,7 +135,7 @@ namespace TactileLibrary
             Kills = kills;
             Drops = drops;
         }
-        public Item_Data(int type, int id, int uses, int kill) : this((Item_Data_Type)type, id, uses, kill) { }
+        public Item_Data(int type, int id, int uses, int kill = 0) : this((Item_Data_Type)type, id, uses, kill) { }
         public Item_Data(Item_Data data) : this(data.Type, data.Id, data.Uses, data.Kills) { }
 
         public bool is_weapon

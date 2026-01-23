@@ -779,7 +779,7 @@ namespace Tactile
 
         internal bool KO_counter_Check(Item_Data item)
         {
-            if (item.Kills >= 5)
+            if (item.Kills >= 50)
                 return true;
             return false;
         }

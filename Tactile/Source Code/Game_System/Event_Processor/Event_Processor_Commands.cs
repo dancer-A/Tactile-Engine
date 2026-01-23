@@ -2452,23 +2452,19 @@ namespace Tactile
         // Shop Inventory
         private void command_shop_inventory(Shop_Data shop)
         {
-            if (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 201)
-                Index++;
+            while (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 85)
             {
-                while (Index + 1 < event_data.data.Count && event_data.data[Index + 1].Key == 85)
+                Index++;
+                shop.add_items(command.Value.Select(str =>
                 {
-                    Index++;
-                    shop.add_items(command.Value.Select(str =>
-                    {
-                        string[] item_str = str.Split(
-                            new string[] { ", " },
-                            StringSplitOptions.RemoveEmptyEntries);
-                        return new ShopItemData(
-                            process_number(item_str[0]),
-                            process_number(item_str[1]),
-                            process_number(item_str[2]));
-                    }));
-                }
+                    string[] item_str = str.Split(
+                        new string[] { ", " },
+                        StringSplitOptions.RemoveEmptyEntries);
+                    return new ShopItemData(
+                        process_number(item_str[0]),
+                        process_number(item_str[1]),
+                        process_number(item_str[2]));
+                }));
             }
         }
 
