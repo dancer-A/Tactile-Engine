@@ -872,20 +872,21 @@ namespace Tactile
                 // Skills: Critical
                 if (actor.has_skill("CRITICAL"))
                     can_crit = true;
-                for (int i = 0; i < items.Count; i++)
-                {
-                    Item_Data item_data = actor.items[i];
-                    if (item_data.is_weapon && item_data.Id == weapon.Id)
+                if (!can_crit)
+                    for (int i = 0; i < items.Count; i++)
                     {
-                        if (item_data.Kills >= Constants.Combat.CRIT_MIN)
+                        Item_Data item_data = actor.items[i];
+                        if (item_data.is_weapon && item_data.Id == weapon.Id)
                         {
-                            crt += Math.Min(item_data.Kills - Constants.Combat.CRIT_MIN, Constants.Combat.CRIT_MAX);
-                            can_crit = true;
+                            if (item_data.Kills >= Constants.Combat.CRIT_MIN)
+                            {
+                                crt += Math.Min(item_data.Kills - Constants.Combat.CRIT_MIN, Constants.Combat.CRIT_MAX);
+                                can_crit = true;
+                            }
+                            else
+                                can_crit = false;
                         }
-                        else
-                            can_crit = false;
                     }
-                }
                 // Skills: Trample
                 if (Trample_Activated)
                     return 0;
@@ -913,6 +914,8 @@ namespace Tactile
                         }
                     }
             }
+            if (target != null && aware(target))
+                can_crit = false;
             if (can_crit)
                 return crt;
             else
@@ -1074,6 +1077,15 @@ namespace Tactile
             if (Global.game_system.In_Arena && !Global.scene.is_test_battle)
                 return true;
             return (target.actor.has_skill("NIHIL") && !actor.has_skill("NIHIL"));
+        }
+
+        public bool aware(Game_Unit target)
+        {
+            if (target == null)
+                return false;
+            if (Global.game_system.In_Arena && !Global.scene.is_test_battle)
+                return true;
+            return (target.actor.has_skill("AWARE") && !actor.has_skill("AWARE"));
         }
         #endregion
 
@@ -1908,6 +1920,15 @@ namespace Tactile
                 // Skills: Fire Stone
                 if (actor.has_skill("FIRESTONE"))
                     n += 10;
+                // Skills: Yewfelle
+                if (actor.has_skill("ULLR+"))
+                    n += 10;
+                // Skills: Gaebolg
+                if (actor.has_skill("DAINN+"))
+                    n += 10;
+                // Skills: Gungnir
+                if (actor.has_skill("NJORUN+"))
+                    n += 10;
                 return n;
             }
         }
@@ -1941,6 +1962,9 @@ namespace Tactile
                 // Skills: Fire Stone
                 if (actor.has_skill("FIRESTONE"))
                     n += 10;
+                // Skills: Valflame
+                if (actor.has_skill("FJALAR+"))
+                    n += 10;
                 return n;
             }
         }
@@ -1967,6 +1991,27 @@ namespace Tactile
                 // Skills: Fire Stone
                 if (actor.has_skill("FIRESTONE"))
                     n += 10;
+                // Skills: Mystletainn
+                if (actor.has_skill("HODR+"))
+                    n += 20;
+                // Skills: Tyrfing
+                if (actor.has_skill("BALDR+"))
+                    n += 10;
+                // Skills: Balmung
+                if (actor.has_skill("OD+"))
+                    n += 10;
+                // Skills: Gaebolg
+                if (actor.has_skill("DAINN+"))
+                    n += 10;
+                // Skills: Mjolnir
+                if (actor.has_skill("THRUD+"))
+                    n += 20;
+                // Skills: Forseti
+                if (actor.has_skill("CED+"))
+                    n += 10;
+                // Skills: Naga
+                if (actor.has_skill("HEIM+"))
+                    n += 20;
                 return n;
             }
         }
@@ -2007,6 +2052,27 @@ namespace Tactile
                 // Skills: El's Passage
                 if (actor.has_skill("EL"))
                     n += 5;
+                // Skills: Tyrfing
+                if (actor.has_skill("BALDR+"))
+                    n += 10;
+                // Skills: Balmung
+                if (actor.has_skill("OD+"))
+                    n += 20;
+                // Skills: Gungnir
+                if (actor.has_skill("NJORUN+"))
+                    n += 10;
+                // Skills: Yewfelle
+                if (actor.has_skill("ULLR+"))
+                    n += 10;
+                // Skills: Forseti
+                if (actor.has_skill("CED+"))
+                    n += 20;
+                // Skills: Mjolnir
+                if (actor.has_skill("THRUD+"))
+                    n += 10;
+                // Skills: Naga
+                if (actor.has_skill("HEIM+"))
+                    n += 20;
                 return n;
             }
         }
@@ -2071,6 +2137,21 @@ namespace Tactile
                 // Skills: Fire Stone
                 if (actor.has_skill("FIRESTONE"))
                     n += 20;
+                // Skills: Gaebolg
+                if (actor.has_skill("DAINN+"))
+                    n += 10;
+                // Skills: Gungnir
+                if (actor.has_skill("NJORUN+"))
+                    n += 10;
+                // Skills: Helswath
+                if (actor.has_skill("NAL+"))
+                    n += 20;
+                // Skills: Valflame
+                if (actor.has_skill("FJALAR+"))
+                    n += 10;
+                // Skills: Naga
+                if (actor.has_skill("HEIM+"))
+                    n += 20;
                 return n;
             }
         }
@@ -2105,6 +2186,21 @@ namespace Tactile
                 // Skills: Fire Stone
                 if (actor.has_skill("FIRESTONE"))
                     n += 10;
+                // Skills: Mystletainn
+                if (actor.has_skill("HODR+"))
+                    n += 10;
+                // Skills: Tyrfing
+                if (actor.has_skill("BALDR+"))
+                    n += 20;
+                // Skills: Helswath
+                if (actor.has_skill("NAL+"))
+                    n += 10;
+                // Skills: Valflame
+                if (actor.has_skill("FJALAR+"))
+                    n += 10;
+                // Skills: Naga
+                if (actor.has_skill("HEIM+"))
+                    n += 20;
                 return n;
             }
         }

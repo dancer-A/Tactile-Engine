@@ -16,7 +16,7 @@ namespace Tactile
         
         #region Skill Timings
         internal readonly static Dictionary<int, int[]> SKILL_ACTIVATION_FRAME = new Dictionary<int, int[]> {
-            { 51, new int[] {  6,  6 }}, // Swordmaster
+            { 8, new int[] {  6,  6 }}, // Swordmaster
             { 59, new int[] {  3,  3 }}, // Halberdier
             { 70, new int[] { 10, 10 }}, // Paladin
             { 76, new int[] { 10, 10 }}, // Falcoknight

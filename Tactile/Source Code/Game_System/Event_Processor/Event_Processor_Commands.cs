@@ -2782,7 +2782,7 @@ namespace Tactile
                     break;
                 #endregion
                 case "Actor Stat Increase":
-                    #region Increase any specific unit's stats
+                #region Increase any specific unit's stats, very similar to boss stat increase, likely could just be it but edited, but i'm lazy
                     // Value[1] = actorid
                     // Value[2] = Whatever Stat buff
                     get_actor("false", command.Value[1], out actor);
@@ -2835,7 +2835,7 @@ namespace Tactile
                   break;
                 #endregion
                 case "Dismount Unit":
-                    #region Force unit to dismount
+                #region Force unit to dismount
                     // Value[1] = id is for a unit, or for an actor
                     // Value[2] = id
                     get_actor(command.Value[1], command.Value[2], out actor);
@@ -2846,7 +2846,7 @@ namespace Tactile
                     break;
                 #endregion
                 case "Remount Unit":
-                    #region Force unit to remount
+                #region Force unit to remount
                     // Value[1] = id is for a unit, or for an actor
                     // Value[2] = id
                     get_actor(command.Value[1], command.Value[2], out actor);

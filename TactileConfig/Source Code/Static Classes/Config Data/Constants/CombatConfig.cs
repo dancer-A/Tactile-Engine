@@ -23,7 +23,7 @@ namespace Tactile.Constants
         public const float STAFF_HEAL_POW_RATE = 0.5f;
         public const bool HALVE_EFFECTIVENESS_ON_FORTS = true; // Halve the bonus damage of effective weapons on healing terrain?
 
-        public const bool IMBUE_WITH_RES = true; // Using magic attacks with physical weapons uses Res intsead of Str?
+        public const bool IMBUE_WITH_RES = false; // Using magic attacks with physical weapons uses Res intsead of Str?
         public const float MAGIC_WEAPON_STR_RATE = 1f; // Multiplier to imbued weapon user's atk stat when casting magic
         public const float MAGIC_WEAPON_MGT_RATE = 1f; // Multiplier to imbued weapon Mgt when casting magic
         public const float MAGIC_WEAPON_CRT_RATE = 0.5f; // Multiplier to imbued weapon final crt rate when casting magic
